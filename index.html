@@ -322,15 +322,15 @@ input[type="date"],input[type="time"]{cursor:pointer}
     <div class="field-row-3">
       <div class="field">
         <label for="p-adultos">Adultos</label>
-        <input type="number" id="p-adultos" placeholder="2" min="1" max="20" value="1" oninput="calcValorPorPessoa()">
+        <input type="number" id="p-adultos" placeholder="2" min="1" max="20" value="1" oninput="calcValorPorPessoa();calcCotacao();calcJurosCartao()">
       </div>
       <div class="field">
         <label for="p-criancas">Criancas <span class="label-hint">(2-11 anos)</span></label>
-        <input type="number" id="p-criancas" placeholder="0" min="0" max="10" value="0" oninput="calcValorPorPessoa();toggleIdadesCriancas()">
+        <input type="number" id="p-criancas" placeholder="0" min="0" max="10" value="0" oninput="calcValorPorPessoa();calcCotacao();calcJurosCartao();toggleIdadesCriancas()">
       </div>
       <div class="field">
         <label for="p-bebes">Bebes <span class="label-hint">(0-1 ano)</span></label>
-        <input type="number" id="p-bebes" placeholder="0" min="0" max="5" value="0" oninput="calcValorPorPessoa();toggleIdadesBebes()">
+        <input type="number" id="p-bebes" placeholder="0" min="0" max="5" value="0" oninput="calcValorPorPessoa();calcCotacao();calcJurosCartao();toggleIdadesBebes()">
       </div>
     </div>
     <div id="idades-criancas-box" style="display:none">
@@ -475,6 +475,7 @@ input[type="date"],input[type="time"]{cursor:pointer}
           <option value="direto">Direto</option>
           <option value="1escala">1 Escala</option>
           <option value="2escalas">2 Escalas</option>
+          <option value="3escalas">3 Escalas</option>
         </select>
       </div>
     </div>
@@ -552,6 +553,41 @@ input[type="date"],input[type="time"]{cursor:pointer}
             <div class="iata-wrap">
               <input type="text" id="p-troca-ida2-dest" placeholder="CGH" autocomplete="off" oninput="iataAC(this,'p-troca-ida2-dest-list')" onblur="hideAC('p-troca-ida2-dest-list',300)">
               <div class="iata-dropdown" id="p-troca-ida2-dest-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="escala-ida3-box" style="display:none;margin-top:8px">
+        <div class="section-label">Escala 3</div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-escala-cidade3">Cidade da Escala 3 <span class="label-hint">IATA ou nome</span></label>
+            <div class="iata-wrap">
+              <input type="text" id="p-escala-cidade3" placeholder="GRU" autocomplete="off" oninput="iataAC(this,'p-esc-ida3-list')" onblur="hideAC('p-esc-ida3-list',300)">
+              <div class="iata-dropdown" id="p-esc-ida3-list"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="p-escala-tempo3">Tempo de Espera</label>
+            <input type="text" id="p-escala-tempo3" placeholder="55 min">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-voo-ida4">Numero do 4o Voo</label>
+            <input type="text" id="p-voo-ida4" placeholder="G3 1936">
+          </div>
+          <div class="field" style="display:flex;align-items:center;gap:8px;padding-top:20px">
+            <input type="checkbox" id="p-troca-ida3" style="width:16px;height:16px;cursor:pointer;accent-color:#b45309" onchange="toggleTrocaDest('ida3')">
+            <label for="p-troca-ida3" style="font-size:.78rem;color:#b45309;font-weight:600;cursor:pointer;line-height:1.3">Troca de aeroporto</label>
+          </div>
+        </div>
+        <div id="p-troca-ida3-dest-box" style="display:none;margin-top:2px">
+          <div class="field">
+            <label for="p-troca-ida3-dest">Segundo aeroporto <span class="label-hint">ex: CGH — Congonhas</span></label>
+            <div class="iata-wrap">
+              <input type="text" id="p-troca-ida3-dest" placeholder="CGH" autocomplete="off" oninput="iataAC(this,'p-troca-ida3-dest-list')" onblur="hideAC('p-troca-ida3-dest-list',300)">
+              <div class="iata-dropdown" id="p-troca-ida3-dest-list"></div>
             </div>
           </div>
         </div>
@@ -690,6 +726,7 @@ input[type="date"],input[type="time"]{cursor:pointer}
           <option value="direto">Direto</option>
           <option value="1escala">1 Escala</option>
           <option value="2escalas">2 Escalas</option>
+          <option value="3escalas">3 Escalas</option>
         </select>
       </div>
     </div>
@@ -764,6 +801,41 @@ input[type="date"],input[type="time"]{cursor:pointer}
           </div>
         </div>
       </div>
+      <div id="escala-volta3-box" style="display:none;margin-top:8px">
+        <div class="section-label">Escala 3</div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-escala-cidade-v3">Cidade da Escala 3 <span class="label-hint">IATA ou nome</span></label>
+            <div class="iata-wrap">
+              <input type="text" id="p-escala-cidade-v3" placeholder="GRU" autocomplete="off" oninput="iataAC(this,'p-esc-v3-list')" onblur="hideAC('p-esc-v3-list',300)">
+              <div class="iata-dropdown" id="p-esc-v3-list"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="p-escala-tempo-v3">Tempo de Espera</label>
+            <input type="text" id="p-escala-tempo-v3" placeholder="55 min">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-voo-volta4">Numero do 4o Voo</label>
+            <input type="text" id="p-voo-volta4" placeholder="G3 1936">
+          </div>
+          <div class="field" style="display:flex;align-items:center;gap:8px;padding-top:20px">
+            <input type="checkbox" id="p-troca-volta3" style="width:16px;height:16px;cursor:pointer;accent-color:#b45309" onchange="toggleTrocaDest('volta3')">
+            <label for="p-troca-volta3" style="font-size:.78rem;color:#b45309;font-weight:600;cursor:pointer;line-height:1.3">Troca de aeroporto</label>
+          </div>
+        </div>
+        <div id="p-troca-volta3-dest-box" style="display:none;margin-top:2px">
+          <div class="field">
+            <label for="p-troca-volta3-dest">Segundo aeroporto <span class="label-hint">ex: CGH — Congonhas</span></label>
+            <div class="iata-wrap">
+              <input type="text" id="p-troca-volta3-dest" placeholder="CGH" autocomplete="off" oninput="iataAC(this,'p-troca-volta3-dest-list')" onblur="hideAC('p-troca-volta3-dest-list',300)">
+              <div class="iata-dropdown" id="p-troca-volta3-dest-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -779,11 +851,22 @@ input[type="date"],input[type="time"]{cursor:pointer}
         </select>
       </div>
       <div class="field">
-        <label for="p-bag-desp">Bagagem Despachada</label>
-        <select id="p-bag-desp">
+        <label for="p-bag-desp-ida">Despacho na Ida</label>
+        <select id="p-bag-desp-ida">
           <option value="Nao inclusa">Nao inclusa</option>
-          <option value="1 mala (23kg) inclusa">1 mala (23kg) inclusa</option>
-          <option value="2 malas (23kg) inclusas">2 malas (23kg) inclusas</option>
+          <option value="1 mala (23kg)">1 mala (23kg)</option>
+          <option value="2 malas (23kg)">2 malas (23kg)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:10px">
+      <div class="field" style="visibility:hidden"></div>
+      <div class="field">
+        <label for="p-bag-desp-volta">Despacho na Volta</label>
+        <select id="p-bag-desp-volta">
+          <option value="Nao inclusa">Nao inclusa</option>
+          <option value="1 mala (23kg)">1 mala (23kg)</option>
+          <option value="2 malas (23kg)">2 malas (23kg)</option>
         </select>
       </div>
     </div>
@@ -1823,7 +1906,7 @@ function saveHist(h) { localStorage.setItem(HIST_KEY, JSON.stringify(h)); update
 function addHist(entry) {
   const h = getHist();
   h.unshift({ ...entry, id: Date.now(), data: fmtDate() });
-  if (h.length > 50) h.pop();
+  if (h.length > 300) h.pop();
   saveHist(h);
 }
 function updateHistBadge() {
@@ -1840,8 +1923,12 @@ function renderHistorico() {
     return;
   }
   c.innerHTML = `<div class="hist-header"><span class="hist-count">${h.length} registro${h.length!==1?'s':''}</span><button class="btn-clear-all" onclick="clearAll()">Limpar tudo</button></div>
+  <div style="margin-bottom:12px;position:relative">
+    <svg style="position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="hist-busca" placeholder="Pesquisar por nome ou destino..." oninput="filtrarHistorico(this.value)" style="width:100%;padding:10px 13px 10px 34px;border:1px solid var(--border);border-radius:8px;font-family:var(--font);font-size:.82rem;outline:none">
+  </div>
   <div class="hist-list">${h.map(item => `
-    <div class="hist-item" id="hi-${item.id}">
+    <div class="hist-item" id="hi-${item.id}" data-nome="${escH((item.nome||'')+' '+(item.subtitulo||'')+' '+(item.url||''))}">
       <div class="hist-item-top">
         <div class="hist-item-info">
           <div class="hist-nome">${escH(item.nome)}</div>
@@ -1864,6 +1951,12 @@ function renderHistorico() {
       <div class="hist-url">${escH(item.url)}</div>
     </div>`).join('')}
   </div>`;
+}
+function filtrarHistorico(q) {
+  const term = (q||'').toLowerCase().trim();
+  document.querySelectorAll('#hist-container .hist-item').forEach(el => {
+    el.style.display = !term || (el.dataset.nome||'').toLowerCase().includes(term) ? '' : 'none';
+  });
 }
 function copiarHist(id) {
   const h = getHist(); const item = h.find(x => x.id == id); if (!item) return;
@@ -1896,6 +1989,8 @@ function restaurarProposta(d) {
   sc('p-troca-ida1', d.trocaIda1); sv('p-troca-ida1-dest', d.trocaIda1Dest);
   sv('p-escala-cidade2', d.escalaCidade2Ida); sv('p-escala-tempo2', d.escalaTempo2Ida); sv('p-voo-ida3', d.vooIda3);
   sc('p-troca-ida2', d.trocaIda2); sv('p-troca-ida2-dest', d.trocaIda2Dest);
+  sv('p-escala-cidade3', d.escalaCidade3Ida); sv('p-escala-tempo3', d.escalaTempo3Ida); sv('p-voo-ida4', d.vooIda4);
+  sc('p-troca-ida3', d.trocaIda3); sv('p-troca-ida3-dest', d.trocaIda3Dest);
   sv('p-data-volta', d.dataVoltaISO); sv('p-voo-volta', d.vooVolta);
   sv('p-hora-dep-v', d.depVolta); sv('p-hora-cheg-v', d.chegVolta); sv('p-duracao-volta', d.durVolta);
   sv('p-parada-volta', d.paradaVolta);
@@ -1903,8 +1998,12 @@ function restaurarProposta(d) {
   sc('p-troca-volta1', d.trocaVolta1); sv('p-troca-volta1-dest', d.trocaVolta1Dest);
   sv('p-escala-cidade-v2', d.escalaCidade2Volta); sv('p-escala-tempo-v2', d.escalaTempo2Volta); sv('p-voo-volta3', d.vooVolta3);
   sc('p-troca-volta2', d.trocaVolta2); sv('p-troca-volta2-dest', d.trocaVolta2Dest);
+  sv('p-escala-cidade-v3', d.escalaCidade3Volta); sv('p-escala-tempo-v3', d.escalaTempo3Volta); sv('p-voo-volta4', d.vooVolta4);
+  sc('p-troca-volta3', d.trocaVolta3); sv('p-troca-volta3-dest', d.trocaVolta3Dest);
   sc('p-multitrecho', d.multitrecho); sv('p-orig-volta', d.origVolta); sv('p-dest-volta', d.destVolta);
-  sv('p-bag-mao', d.bagMao); sv('p-bag-desp', d.bagDesp);
+  sv('p-bag-mao', d.bagMao);
+  sv('p-bag-desp-ida', d.bagDespIda || d.bagDesp || 'Nao inclusa');
+  sv('p-bag-desp-volta', d.bagDespVolta || d.bagDesp || 'Nao inclusa');
   sv('p-hotel-nome', d.hotelNome); sv('p-hotel-regime', d.hotelRegime); sv('p-link-hotel', d.linkHotel);
   sv('p-val-total-pix', d.valTotalPix); sv('p-val-cartao', d.valCartaoBase); sv('p-parcelas', d.parcelas);
   sc('p-com-juros', d.comJuros !== false); toggleJurosUI();
@@ -2692,12 +2791,14 @@ function toggleMultitrecho() {
 function toggleEscalaIda() {
   const val = document.getElementById('p-parada-ida').value;
   document.getElementById('escala-ida-box').style.display  = val !== 'direto' ? 'block' : 'none';
-  document.getElementById('escala-ida2-box').style.display = val === '2escalas' ? 'block' : 'none';
+  document.getElementById('escala-ida2-box').style.display = (val === '2escalas' || val === '3escalas') ? 'block' : 'none';
+  document.getElementById('escala-ida3-box').style.display = val === '3escalas' ? 'block' : 'none';
 }
 function toggleEscalaVolta() {
   const val = document.getElementById('p-parada-volta').value;
   document.getElementById('escala-volta-box').style.display  = val !== 'direto' ? 'block' : 'none';
-  document.getElementById('escala-volta2-box').style.display = val === '2escalas' ? 'block' : 'none';
+  document.getElementById('escala-volta2-box').style.display = (val === '2escalas' || val === '3escalas') ? 'block' : 'none';
+  document.getElementById('escala-volta3-box').style.display = val === '3escalas' ? 'block' : 'none';
 }
 
 // ── PASSAGEIROS: idades dinamicas ─────────────────────────────────────────────
@@ -3154,6 +3255,11 @@ function gerarProposta() {
     vooIda3: document.getElementById('p-voo-ida3').value.trim(),
     trocaIda2: document.getElementById('p-troca-ida2').checked,
     trocaIda2Dest: document.getElementById('p-troca-ida2-dest').value.trim(),
+    escalaCidade3Ida: document.getElementById('p-escala-cidade3').value.trim(),
+    escalaTempo3Ida:  document.getElementById('p-escala-tempo3').value.trim(),
+    vooIda4: document.getElementById('p-voo-ida4').value.trim(),
+    trocaIda3: document.getElementById('p-troca-ida3').checked,
+    trocaIda3Dest: document.getElementById('p-troca-ida3-dest').value.trim(),
     vooVolta:  document.getElementById('p-voo-volta').value.trim(),
     dataVolta: fmtDatePT(dataVoltaISO),
     depVolta:  document.getElementById('p-hora-dep-v').value,
@@ -3170,11 +3276,17 @@ function gerarProposta() {
     vooVolta3: document.getElementById('p-voo-volta3').value.trim(),
     trocaVolta2: document.getElementById('p-troca-volta2').checked,
     trocaVolta2Dest: document.getElementById('p-troca-volta2-dest').value.trim(),
+    escalaCidade3Volta: document.getElementById('p-escala-cidade-v3').value.trim(),
+    escalaTempo3Volta:  document.getElementById('p-escala-tempo-v3').value.trim(),
+    vooVolta4: document.getElementById('p-voo-volta4').value.trim(),
+    trocaVolta3: document.getElementById('p-troca-volta3').checked,
+    trocaVolta3Dest: document.getElementById('p-troca-volta3-dest').value.trim(),
     multitrecho: document.getElementById('p-multitrecho').checked,
     origVolta: document.getElementById('p-orig-volta').value.trim(),
     destVolta: document.getElementById('p-dest-volta').value.trim(),
     bagMao:  document.getElementById('p-bag-mao').value,
-    bagDesp: document.getElementById('p-bag-desp').value,
+    bagDespIda:   document.getElementById('p-bag-desp-ida').value,
+    bagDespVolta: document.getElementById('p-bag-desp-volta').value,
     hotelNome:    document.getElementById('p-hotel-nome').value.trim(),
     hotelNoites:  document.getElementById('p-hotel-noites').value,
     hotelCheckin: document.getElementById('p-hotel-checkin').value,
@@ -3226,8 +3338,10 @@ function abrirProposta(d) {
   const iataDest = d.dest.split('\u2014')[0].trim().split(' ')[0];
   const iataEscIda   = d.escalaCidadeIda   ? d.escalaCidadeIda.split('\u2014')[0].trim().split(' ')[0]   : '';
   const iataEscIda2  = d.escalaCidade2Ida  ? d.escalaCidade2Ida.split('\u2014')[0].trim().split(' ')[0]  : '';
+  const iataEscIda3  = d.escalaCidade3Ida  ? d.escalaCidade3Ida.split('\u2014')[0].trim().split(' ')[0]  : '';
   const iataEscVolta = d.escalaCidadeVolta ? d.escalaCidadeVolta.split('\u2014')[0].trim().split(' ')[0] : '';
   const iataEscVolta2= d.escalaCidade2Volta? d.escalaCidade2Volta.split('\u2014')[0].trim().split(' ')[0]: '';
+  const iataEscVolta3= d.escalaCidade3Volta? d.escalaCidade3Volta.split('\u2014')[0].trim().split(' ')[0]: '';
 
   function escalaBloco(cidade, iata, tempo, troca, trocaDest) {
     if (!cidade) return '';
@@ -3256,12 +3370,14 @@ function abrirProposta(d) {
 
   const blocoEscalaIda = d.paradaIda !== 'direto' ? [
     escalaBloco(d.escalaCidadeIda,   iataEscIda,   d.escalaTempoIda,  d.trocaIda1, d.trocaIda1Dest),
-    d.paradaIda === '2escalas' ? escalaBloco(d.escalaCidade2Ida, iataEscIda2, d.escalaTempo2Ida, d.trocaIda2, d.trocaIda2Dest) : ''
+    (d.paradaIda === '2escalas' || d.paradaIda === '3escalas') ? escalaBloco(d.escalaCidade2Ida, iataEscIda2, d.escalaTempo2Ida, d.trocaIda2, d.trocaIda2Dest) : '',
+    d.paradaIda === '3escalas' ? escalaBloco(d.escalaCidade3Ida, iataEscIda3, d.escalaTempo3Ida, d.trocaIda3, d.trocaIda3Dest) : ''
   ].join('') : '';
 
   const blocoEscalaVolta = d.paradaVolta !== 'direto' ? [
     escalaBloco(d.escalaCidadeVolta,  iataEscVolta,  d.escalaTempoVolta,  d.trocaVolta1, d.trocaVolta1Dest),
-    d.paradaVolta === '2escalas' ? escalaBloco(d.escalaCidade2Volta, iataEscVolta2, d.escalaTempo2Volta, d.trocaVolta2, d.trocaVolta2Dest) : ''
+    (d.paradaVolta === '2escalas' || d.paradaVolta === '3escalas') ? escalaBloco(d.escalaCidade2Volta, iataEscVolta2, d.escalaTempo2Volta, d.trocaVolta2, d.trocaVolta2Dest) : '',
+    d.paradaVolta === '3escalas' ? escalaBloco(d.escalaCidade3Volta, iataEscVolta3, d.escalaTempo3Volta, d.trocaVolta3, d.trocaVolta3Dest) : ''
   ].join('') : '';
 
   const html = `<!DOCTYPE html>
@@ -3414,7 +3530,7 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
           <div class="voo-info-row">
             ${d.dataIda?`<div class="voo-info-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>${esc(d.dataIda)}</strong></div>`:''}
             ${d.bagMao?`<div class="voo-info-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Mao: <strong>${esc(d.bagMao)}</strong></div>`:''}
-            ${d.bagDesp?`<div class="voo-info-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3l2-3h6l2 3h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2z"/></svg>Despacho: <strong>${esc(d.bagDesp)}</strong></div>`:''}
+            ${d.bagDespIda && d.bagDespIda!=='Nao inclusa'?`<div class="voo-info-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3l2-3h6l2 3h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2z"/></svg>Despacho: <strong>${esc(d.bagDespIda)}</strong></div>`:''}
           </div>
         </div>
       </div>
@@ -3450,6 +3566,7 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
           ${blocoEscalaVolta}
           <div class="voo-info-row">
             ${d.dataVolta?`<div class="voo-info-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>${esc(d.dataVolta)}</strong></div>`:''}
+            ${d.bagDespVolta && d.bagDespVolta!=='Nao inclusa'?`<div class="voo-info-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3l2-3h6l2 3h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2z"/></svg>Despacho: <strong>${esc(d.bagDespVolta)}</strong></div>`:''}
           </div>
         </div>
       </div>
@@ -3503,9 +3620,11 @@ function limparProposta() {
   const ids = ['p-cliente','p-orig','p-dest','p-voo-ida','p-hora-dep','p-hora-cheg',
     'p-duracao-ida','p-escala-cidade','p-escala-tempo','p-voo-ida2',
     'p-troca-ida1-dest','p-escala-cidade2','p-escala-tempo2','p-voo-ida3','p-troca-ida2-dest',
+    'p-escala-cidade3','p-escala-tempo3','p-voo-ida4','p-troca-ida3-dest',
     'p-voo-volta','p-hora-dep-v','p-hora-cheg-v','p-duracao-volta',
     'p-escala-cidade-v','p-escala-tempo-v','p-voo-volta2',
     'p-troca-volta1-dest','p-escala-cidade-v2','p-escala-tempo-v2','p-voo-volta3','p-troca-volta2-dest',
+    'p-escala-cidade-v3','p-escala-tempo-v3','p-voo-volta4','p-troca-volta3-dest',
     'p-orig-volta','p-dest-volta',
     'p-hotel-nome','p-hotel-noites','p-hotel-checkin','p-hotel-checkout','p-link-hotel',
     'p-val-total-pix','p-val-pix-pessoa','p-val-cartao','p-obs','p-link-aereo'];
@@ -3523,14 +3642,19 @@ function limparProposta() {
   document.getElementById('idades-bebes-box').style.display = 'none';
   document.getElementById('idades-criancas-inputs').innerHTML = '';
   document.getElementById('idades-bebes-inputs').innerHTML = '';
+  document.getElementById('p-bag-desp-ida').value = 'Nao inclusa';
+  document.getElementById('p-bag-desp-volta').value = 'Nao inclusa';
   document.getElementById('escala-ida-box').style.display = 'none';
   document.getElementById('escala-ida2-box').style.display = 'none';
+  document.getElementById('escala-ida3-box').style.display = 'none';
   document.getElementById('escala-volta-box').style.display = 'none';
   document.getElementById('escala-volta2-box').style.display = 'none';
-  ['p-troca-ida1','p-troca-ida2','p-troca-volta1','p-troca-volta2','p-multitrecho'].forEach(id => {
+  document.getElementById('escala-volta3-box').style.display = 'none';
+  ['p-troca-ida1','p-troca-ida2','p-troca-ida3','p-troca-volta1','p-troca-volta2','p-troca-volta3','p-multitrecho'].forEach(id => {
     const el = document.getElementById(id); if(el) el.checked = false;
   });
-  ['p-troca-ida1-dest-box','p-troca-ida2-dest-box','p-troca-volta1-dest-box','p-troca-volta2-dest-box','p-multitrecho-box'].forEach(id => {
+  ['p-troca-ida1-dest-box','p-troca-ida2-dest-box','p-troca-ida3-dest-box',
+   'p-troca-volta1-dest-box','p-troca-volta2-dest-box','p-troca-volta3-dest-box','p-multitrecho-box'].forEach(id => {
     const el = document.getElementById(id); if(el) el.style.display = 'none';
   });
   document.getElementById('p-parada-ida').value = 'direto';
