@@ -322,15 +322,15 @@ input[type="date"],input[type="time"]{cursor:pointer}
     <div class="field-row-3">
       <div class="field">
         <label for="p-adultos">Adultos</label>
-        <input type="number" id="p-adultos" placeholder="2" min="1" max="20" value="1" oninput="calcValorPorPessoa();calcCotacao();calcJurosCartao()">
+        <input type="number" id="p-adultos" placeholder="2" min="1" max="20" value="1" oninput="onPaxChange()">
       </div>
       <div class="field">
         <label for="p-criancas">Criancas <span class="label-hint">(2-11 anos)</span></label>
-        <input type="number" id="p-criancas" placeholder="0" min="0" max="10" value="0" oninput="calcValorPorPessoa();calcCotacao();calcJurosCartao();toggleIdadesCriancas()">
+        <input type="number" id="p-criancas" placeholder="0" min="0" max="10" value="0" oninput="onPaxChange();toggleIdadesCriancas()">
       </div>
       <div class="field">
         <label for="p-bebes">Bebes <span class="label-hint">(0-1 ano)</span></label>
-        <input type="number" id="p-bebes" placeholder="0" min="0" max="5" value="0" oninput="calcValorPorPessoa();calcCotacao();calcJurosCartao();toggleIdadesBebes()">
+        <input type="number" id="p-bebes" placeholder="0" min="0" max="5" value="0" oninput="onPaxChange();toggleIdadesBebes()">
       </div>
     </div>
     <div id="idades-criancas-box" style="display:none">
@@ -3073,16 +3073,25 @@ function calcAplicar() {
   const totalPix = parseFloat(box.dataset.totalPix);
   const parcelas = box.dataset.parcelas;
   if (!totalPix) { showToast('Calcule primeiro antes de aplicar.'); return; }
-  // Preencher campos de valor
   document.getElementById('p-val-total-pix').value = calcFmt(totalPix);
   calcValorPorPessoa();
-  // Preencher cartão (base = total pix)
   document.getElementById('p-val-cartao').value = calcFmt(totalPix);
   if (parcelas) document.getElementById('p-parcelas').value = parcelas;
   calcJurosCartao();
   showToast('Valores aplicados ao formulário!');
-  // Scroll suave até seção de valores
   document.getElementById('p-val-total-pix').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+function calcAplicarSilent() {
+  const box = document.getElementById('calc-resultado-box');
+  if (!box || box.style.display === 'none') return;
+  const totalPix = parseFloat(box.dataset.totalPix);
+  const parcelas = box.dataset.parcelas;
+  if (!totalPix) return;
+  document.getElementById('p-val-total-pix').value = calcFmt(totalPix);
+  calcValorPorPessoa();
+  document.getElementById('p-val-cartao').value = calcFmt(totalPix);
+  if (parcelas) document.getElementById('p-parcelas').value = parcelas;
+  calcJurosCartao();
 }
 
 function calcLimpar() {
@@ -3167,12 +3176,31 @@ function getTotalPax() {
   return Math.max(1, adultos + criancas + bebes);
 }
 
+let _pixPorPessoaBase = 0; // Preco por pessoa — referencia para recalcular total quando pax muda
+
 function calcValorPorPessoa() {
   const totalPax = getTotalPax();
-  // Pix por pessoa
-  const totalPixRaw = document.getElementById('p-val-total-pix').value;
-  const totalPix = parseBRL(totalPixRaw);
-  document.getElementById('p-val-pix-pessoa').value = (!isNaN(totalPix) && totalPix > 0) ? fmtBRL(totalPix / totalPax) : '';
+  const totalPix = parseBRL(document.getElementById('p-val-total-pix').value);
+  if (!isNaN(totalPix) && totalPix > 0 && totalPax > 0) {
+    _pixPorPessoaBase = totalPix / totalPax;
+    document.getElementById('p-val-pix-pessoa').value = fmtBRL(_pixPorPessoaBase);
+  } else {
+    _pixPorPessoaBase = 0;
+    document.getElementById('p-val-pix-pessoa').value = '';
+  }
+}
+
+function onPaxChange() {
+  if (_pixPorPessoaBase > 0) {
+    const newTotal = _pixPorPessoaBase * getTotalPax();
+    document.getElementById('p-val-total-pix').value  = fmtBRL(newTotal);
+    document.getElementById('p-val-pix-pessoa').value = fmtBRL(_pixPorPessoaBase);
+    document.getElementById('p-val-cartao').value     = fmtBRL(newTotal);
+  } else {
+    calcValorPorPessoa();
+  }
+  calcCotacao();
+  calcJurosCartao();
 }
 
 function gerarProposta() {
