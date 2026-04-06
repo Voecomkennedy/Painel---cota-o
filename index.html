@@ -941,10 +941,30 @@ input[type="date"],input[type="time"]{cursor:pointer}
             <option value="Outras">Outras</option>
           </select>
         </div>
-        <div class="field">
+        <div class="field" id="calc-milhas-field-wrap">
           <label for="p-calc-milhas">Quantidade de Milhas</label>
           <input type="number" id="p-calc-milhas" placeholder="Ex: 35000" oninput="calcCotacao()">
         </div>
+      </div>
+      <!-- Toggle: comparativo de tarifas -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px 10px;background:#f0f4ff;border-radius:7px;border:1px solid #c7d7fc">
+        <input type="checkbox" id="p-calc-comp-ativo" onchange="toggleModoComparativo()" style="width:14px;height:14px;cursor:pointer;accent-color:#1a56db;flex-shrink:0">
+        <label for="p-calc-comp-ativo" style="font-size:.75rem;font-weight:600;color:#1a56db;cursor:pointer;margin:0;user-select:none">Comparar tarifas — sem mala vs. com mala</label>
+      </div>
+      <!-- Campos comparativo (ocultos por padrao) -->
+      <div id="calc-comp-campos" style="display:none;margin-bottom:8px">
+        <div style="display:grid;grid-template-columns:48px 1fr 1fr;gap:6px;align-items:center">
+          <div></div>
+          <div style="font-size:.62rem;font-weight:700;text-align:center;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Sem Mala</div>
+          <div style="font-size:.62rem;font-weight:700;text-align:center;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Com Mala</div>
+          <div style="font-size:.73rem;font-weight:600;color:var(--dark)">Ida</div>
+          <input type="number" id="p-calc-milhas-ida-light" placeholder="Ex: 95059" oninput="calcCotacao()" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:.8rem;width:100%;box-sizing:border-box">
+          <input type="number" id="p-calc-milhas-ida-standard" placeholder="Ex: 111202" oninput="calcCotacao()" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:.8rem;width:100%;box-sizing:border-box">
+          <div style="font-size:.73rem;font-weight:600;color:var(--dark)">Volta</div>
+          <input type="number" id="p-calc-milhas-volta-light" placeholder="Ex: 95059" oninput="calcCotacao()" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:.8rem;width:100%;box-sizing:border-box">
+          <input type="number" id="p-calc-milhas-volta-standard" placeholder="Ex: 111202" oninput="calcCotacao()" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:.8rem;width:100%;box-sizing:border-box">
+        </div>
+        <div style="font-size:.62rem;color:var(--mid);margin-top:5px">Milheiro e taxas sao comuns a todas as tarifas.</div>
       </div>
       <div class="field-row">
         <div class="field">
@@ -1104,6 +1124,45 @@ input[type="date"],input[type="time"]{cursor:pointer}
         Lucro abaixo do minimo! Para atingir R$&nbsp;<span id="calc-lucro-minimo-val"></span>,
         cobre no minimo <strong>R$&nbsp;<span id="calc-lucro-sugestao"></span>/milheiro</strong>.
       </div>
+    </div>
+    <!-- COMPARATIVO DE TARIFAS (resultado) -->
+    <div id="calc-comp-resultado" style="display:none;margin-top:6px;border-radius:8px;background:#fff;border:1px solid #c7d7fc;padding:16px">
+      <div style="font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#1a56db;margin-bottom:12px">Comparativo de Tarifas</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div id="calc-comp-opcao-a" onclick="calcCompAplicar('a')" style="cursor:pointer;border:2px solid #e5e7eb;border-radius:8px;padding:10px 13px;transition:border-color .15s">
+          <div style="font-size:.68rem;font-weight:700;color:#1a56db;margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">Sem Mala — Ida + Volta</div>
+          <div id="calc-comp-a-milhas" style="font-size:.65rem;color:var(--mid);margin-bottom:4px"></div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div id="calc-comp-a-total" style="font-size:1.1rem;font-weight:800;color:#14532d"></div>
+            <div id="calc-comp-a-pessoa" style="font-size:.72rem;color:var(--mid)"></div>
+          </div>
+        </div>
+        <div id="calc-comp-opcao-b" onclick="calcCompAplicar('b')" style="cursor:pointer;border:2px solid #e5e7eb;border-radius:8px;padding:10px 13px;transition:border-color .15s">
+          <div style="font-size:.68rem;font-weight:700;color:#374151;margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">Com Mala — Ida + Volta</div>
+          <div id="calc-comp-b-milhas" style="font-size:.65rem;color:var(--mid);margin-bottom:4px"></div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div id="calc-comp-b-total" style="font-size:1.1rem;font-weight:800;color:#374151"></div>
+            <div id="calc-comp-b-pessoa" style="font-size:.72rem;color:var(--mid)"></div>
+          </div>
+        </div>
+        <div id="calc-comp-opcao-c" onclick="calcCompAplicar('c')" style="cursor:pointer;border:2px solid #e5e7eb;border-radius:8px;padding:10px 13px;transition:border-color .15s">
+          <div style="font-size:.68rem;font-weight:700;color:#374151;margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">Com Mala — Somente Ida</div>
+          <div id="calc-comp-c-milhas" style="font-size:.65rem;color:var(--mid);margin-bottom:4px"></div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div id="calc-comp-c-total" style="font-size:1.1rem;font-weight:800;color:#374151"></div>
+            <div id="calc-comp-c-pessoa" style="font-size:.72rem;color:var(--mid)"></div>
+          </div>
+        </div>
+        <div id="calc-comp-opcao-d" onclick="calcCompAplicar('d')" style="cursor:pointer;border:2px solid #e5e7eb;border-radius:8px;padding:10px 13px;transition:border-color .15s">
+          <div style="font-size:.68rem;font-weight:700;color:#374151;margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">Com Mala — Somente Volta</div>
+          <div id="calc-comp-d-milhas" style="font-size:.65rem;color:var(--mid);margin-bottom:4px"></div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <div id="calc-comp-d-total" style="font-size:1.1rem;font-weight:800;color:#374151"></div>
+            <div id="calc-comp-d-pessoa" style="font-size:.72rem;color:var(--mid)"></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:.65rem;color:var(--mid);margin-top:10px;text-align:center">Clique em uma opcao para aplicar ao formulario</div>
     </div>
   </div>
 
@@ -2034,6 +2093,20 @@ function restaurarProposta(d) {
       if (d.calc.custoMilheiro) sv('p-calc-custo-milheiro', d.calc.custoMilheiro);
     }
     calcToggleTipo();
+    // Restaurar comparativo
+    if (d.calc.compAtivo) {
+      const compAtEl = document.getElementById('p-calc-comp-ativo');
+      if (compAtEl) { compAtEl.checked = true; toggleModoComparativo(); }
+      sv('p-calc-milhas-ida-light',      d.calc.milhasIdaLight);
+      sv('p-calc-milhas-ida-standard',   d.calc.milhasIdaStandard);
+      sv('p-calc-milhas-volta-light',    d.calc.milhasVoltaLight);
+      sv('p-calc-milhas-volta-standard', d.calc.milhasVoltaStandard);
+      calcCotacao();
+      if (d.calc.compOpcaoSelecionada) {
+        const el = document.getElementById('calc-comp-opcao-' + d.calc.compOpcaoSelecionada);
+        if (el) el.style.borderColor = '#1a56db';
+      }
+    }
   }
   toggleIdadesCriancas(); toggleIdadesBebes();
   if (d.idadesCriancas) d.idadesCriancas.forEach((v,i) => sv('p-crianca-idade-'+i, v));
@@ -2979,6 +3052,88 @@ function calcCotacao() {
       notaLatam.style.display  = 'none';
       notaOutras.style.display = '';
     }
+    // MODO COMPARATIVO — sem mala vs. com mala
+    const modoComp = document.getElementById('p-calc-comp-ativo')?.checked;
+    if (modoComp) {
+      const idaL   = parseFloat(document.getElementById('p-calc-milhas-ida-light').value)     || 0;
+      const idaS   = parseFloat(document.getElementById('p-calc-milhas-ida-standard').value)  || 0;
+      const voltaL = parseFloat(document.getElementById('p-calc-milhas-volta-light').value)   || 0;
+      const voltaS = parseFloat(document.getElementById('p-calc-milhas-volta-standard').value)|| 0;
+      const compBox = document.getElementById('calc-comp-resultado');
+      document.getElementById('calc-resultado-box').style.display = 'none';
+      document.getElementById('calc-lucro-box').style.display     = 'none';
+      if (!idaL || !idaS || !voltaL || !voltaS || !milheiro) { compBox.style.display = 'none'; return; }
+      const calcTotalComp = (milhasTotal) => {
+        const cm = (milhasTotal / 1000) * milheiro;
+        if (cia === 'LATAM') { const pp = cm + taxas; return { porPessoa: pp, total: pp * totalPax }; }
+        const tot = cm + taxas; return { porPessoa: tot / totalPax, total: tot };
+      };
+      const optA = calcTotalComp(idaL + voltaL);
+      const optB = calcTotalComp(idaS + voltaS);
+      const optC = calcTotalComp(idaS + voltaL);
+      const optD = calcTotalComp(idaL + voltaS);
+      const pp = (v) => totalPax > 1 ? calcFmt(v) + ' / pessoa' : '';
+      document.getElementById('calc-comp-a-milhas').textContent = (idaL+voltaL).toLocaleString('pt-BR') + ' milhas';
+      document.getElementById('calc-comp-a-total').textContent  = calcFmt(optA.total);
+      document.getElementById('calc-comp-a-pessoa').textContent = pp(optA.porPessoa);
+      document.getElementById('calc-comp-b-milhas').textContent = (idaS+voltaS).toLocaleString('pt-BR') + ' milhas';
+      document.getElementById('calc-comp-b-total').textContent  = calcFmt(optB.total);
+      document.getElementById('calc-comp-b-pessoa').textContent = pp(optB.porPessoa);
+      const showC = idaL !== idaS;
+      const showD = voltaL !== voltaS;
+      document.getElementById('calc-comp-opcao-c').style.display = showC ? '' : 'none';
+      document.getElementById('calc-comp-opcao-d').style.display = showD ? '' : 'none';
+      if (showC) {
+        document.getElementById('calc-comp-c-milhas').textContent = (idaS+voltaL).toLocaleString('pt-BR') + ' milhas';
+        document.getElementById('calc-comp-c-total').textContent  = calcFmt(optC.total);
+        document.getElementById('calc-comp-c-pessoa').textContent = pp(optC.porPessoa);
+      }
+      if (showD) {
+        document.getElementById('calc-comp-d-milhas').textContent = (idaL+voltaS).toLocaleString('pt-BR') + ' milhas';
+        document.getElementById('calc-comp-d-total').textContent  = calcFmt(optD.total);
+        document.getElementById('calc-comp-d-pessoa').textContent = pp(optD.porPessoa);
+      }
+      compBox.dataset.optA = JSON.stringify({...optA, milhas:idaL+voltaL, label:'Sem Mala — Ida + Volta',   totalFmt:calcFmt(optA.total), porPessoaFmt:calcFmt(optA.porPessoa)});
+      compBox.dataset.optB = JSON.stringify({...optB, milhas:idaS+voltaS, label:'Com Mala — Ida + Volta',   totalFmt:calcFmt(optB.total), porPessoaFmt:calcFmt(optB.porPessoa)});
+      compBox.dataset.optC = JSON.stringify({...optC, milhas:idaS+voltaL, label:'Com Mala — Somente Ida',   totalFmt:calcFmt(optC.total), porPessoaFmt:calcFmt(optC.porPessoa)});
+      compBox.dataset.optD = JSON.stringify({...optD, milhas:idaL+voltaS, label:'Com Mala — Somente Volta',  totalFmt:calcFmt(optD.total), porPessoaFmt:calcFmt(optD.porPessoa)});
+      compBox.style.display = '';
+      // Análise de lucro no modo comparativo (referência: opção A — sem mala)
+      const custoAqComp = calcParseBRL(document.getElementById('p-calc-custo-milheiro').value);
+      const lucroBoxComp = document.getElementById('calc-lucro-box');
+      if (custoAqComp > 0 && milheiro > 0 && (idaL+voltaL) > 0) {
+        const isNacComp   = detectarNacional();
+        const nacComp     = isNacComp !== false;
+        const minComp     = nacComp ? 100 : 200;
+        const tipoLabelC  = (isNacComp === null ? 'Nacional (auto)' : isNacComp ? 'Nacional' : 'Internacional') + ' — Sem Mala';
+        const milhasRefC  = idaL + voltaL;
+        const lucroC      = (milhasRefC / 1000) * (milheiro - custoAqComp);
+        const deficitC    = minComp - lucroC;
+        document.getElementById('calc-lucro-tipo-label').textContent = tipoLabelC;
+        document.getElementById('calc-lucro-valor').textContent      = calcFmt(lucroC);
+        document.getElementById('calc-lucro-minimo').textContent     = calcFmt(minComp);
+        if (deficitC > 0) {
+          const milhMinC = custoAqComp + (minComp / (milhasRefC / 1000));
+          document.getElementById('calc-lucro-minimo-val').textContent = minComp.toFixed(2).replace('.',',');
+          document.getElementById('calc-lucro-sugestao').textContent   = milhMinC.toFixed(2).replace('.',',');
+          document.getElementById('calc-lucro-alerta').style.display   = '';
+          lucroBoxComp.style.background  = '#fff7f7'; lucroBoxComp.style.borderColor = '#fca5a5';
+          document.getElementById('calc-lucro-titulo').style.color = '#b91c1c';
+          document.getElementById('calc-lucro-valor').style.color  = '#b91c1c';
+          document.getElementById('calc-lucro-minimo').style.color = '#b91c1c';
+        } else {
+          document.getElementById('calc-lucro-alerta').style.display = 'none';
+          lucroBoxComp.style.background  = '#f0fdf4'; lucroBoxComp.style.borderColor = '#86efac';
+          document.getElementById('calc-lucro-titulo').style.color = '#166534';
+          document.getElementById('calc-lucro-valor').style.color  = '#14532d';
+          document.getElementById('calc-lucro-minimo').style.color = '#14532d';
+        }
+        lucroBoxComp.style.display = '';
+      } else {
+        lucroBoxComp.style.display = 'none';
+      }
+      return;
+    }
     if (!milhas || !milheiro) { document.getElementById('calc-resultado-box').style.display='none'; document.getElementById('calc-lucro-box').style.display='none'; return; }
     const custoMilhas = (milhas / 1000) * milheiro;
     if (cia === 'LATAM') {
@@ -3094,6 +3249,36 @@ function calcAplicarSilent() {
   calcJurosCartao();
 }
 
+let _calcCompOpcaoSelecionada = null;
+
+function toggleModoComparativo() {
+  const ativo = document.getElementById('p-calc-comp-ativo').checked;
+  const milhasWrap = document.getElementById('calc-milhas-field-wrap');
+  if (milhasWrap) milhasWrap.style.display = ativo ? 'none' : '';
+  document.getElementById('calc-comp-campos').style.display = ativo ? '' : 'none';
+  document.getElementById('calc-comp-resultado').style.display = 'none';
+  calcCotacao();
+}
+
+function calcCompAplicar(opcao) {
+  const box  = document.getElementById('calc-comp-resultado');
+  const key  = 'opt' + opcao.toUpperCase();
+  if (!box.dataset[key]) return;
+  const data = JSON.parse(box.dataset[key]);
+  _calcCompOpcaoSelecionada = { opcao, ...data };
+  document.getElementById('p-val-total-pix').value = data.totalFmt;
+  calcValorPorPessoa();
+  document.getElementById('p-val-cartao').value = data.totalFmt;
+  calcJurosCartao();
+  // Destacar card selecionado
+  ['a','b','c'].forEach(o => {
+    const el = document.getElementById('calc-comp-opcao-' + o);
+    if (el) el.style.borderColor = o === opcao ? '#1a56db' : '#e5e7eb';
+  });
+  showToast('Opcao "' + data.label + '" aplicada ao formulario!');
+  document.getElementById('p-val-total-pix').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
 function calcLimpar() {
   ['p-calc-milhas','p-calc-milheiro','p-calc-taxas-milhas',
    'p-calc-valor-vista','p-calc-fornecedor','p-calc-lucro','p-calc-taxas-real',
@@ -3106,6 +3291,20 @@ function calcLimpar() {
   document.getElementById('p-calc-faixa-box').style.display = 'none';
   document.getElementById('p-calc-custo-obs').style.display = 'none';
   document.getElementById('calc-lucro-box').style.display = 'none';
+  // Reset comparativo
+  ['p-calc-milhas-ida-light','p-calc-milhas-ida-standard',
+   'p-calc-milhas-volta-light','p-calc-milhas-volta-standard'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  const compAtEl = document.getElementById('p-calc-comp-ativo');
+  if (compAtEl) compAtEl.checked = false;
+  const compCamposEl = document.getElementById('calc-comp-campos');
+  if (compCamposEl) compCamposEl.style.display = 'none';
+  const compResEl = document.getElementById('calc-comp-resultado');
+  if (compResEl) compResEl.style.display = 'none';
+  const milhasWrapEl = document.getElementById('calc-milhas-field-wrap');
+  if (milhasWrapEl) milhasWrapEl.style.display = '';
+  _calcCompOpcaoSelecionada = null;
   calcToggleTipo();
 }
 
@@ -3345,6 +3544,16 @@ function gerarProposta() {
       programa:      document.getElementById('p-calc-programa').value,
       faixa:         document.getElementById('p-calc-faixa').value,
       custoMilheiro: document.getElementById('p-calc-custo-milheiro').value,
+      compAtivo:            document.getElementById('p-calc-comp-ativo')?.checked || false,
+      milhasIdaLight:       document.getElementById('p-calc-milhas-ida-light')?.value    || '',
+      milhasIdaStandard:    document.getElementById('p-calc-milhas-ida-standard')?.value || '',
+      milhasVoltaLight:     document.getElementById('p-calc-milhas-volta-light')?.value  || '',
+      milhasVoltaStandard:  document.getElementById('p-calc-milhas-volta-standard')?.value || '',
+      compOpcaoSelecionada: _calcCompOpcaoSelecionada ? _calcCompOpcaoSelecionada.opcao : null,
+      compOptA: document.getElementById('calc-comp-resultado')?.dataset?.optA || null,
+      compOptB: document.getElementById('calc-comp-resultado')?.dataset?.optB || null,
+      compOptC: document.getElementById('calc-comp-resultado')?.dataset?.optC || null,
+      compOptD: document.getElementById('calc-comp-resultado')?.dataset?.optD || null,
     },
     geradoEm: new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'})
   };
@@ -3613,18 +3822,52 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
         ${d.linkHotel?`<a class="hotel-link" href="${esc(d.linkHotel)}" target="_blank" rel="noopener"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Ver fotos do hotel</a>`:''}
       </div>
     </div>`:''}
+    ${(d.calc && d.calc.compAtivo && d.calc.compOptA) ? (()=>{
+      const optA = JSON.parse(d.calc.compOptA);
+      const optB = JSON.parse(d.calc.compOptB);
+      const optC = d.calc.compOptC ? JSON.parse(d.calc.compOptC) : null;
+      const optD = d.calc.compOptD ? JSON.parse(d.calc.compOptD) : null;
+      const sel  = d.calc.compOpcaoSelecionada;
+      const rows = [
+        {opcao:'a', label:optA.label, totalFmt:optA.totalFmt, ppFmt:optA.porPessoaFmt},
+        {opcao:'b', label:optB.label, totalFmt:optB.totalFmt, ppFmt:optB.porPessoaFmt},
+        ...(optC ? [{opcao:'c', label:optC.label, totalFmt:optC.totalFmt, ppFmt:optC.porPessoaFmt}] : []),
+        ...(optD ? [{opcao:'d', label:optD.label, totalFmt:optD.totalFmt, ppFmt:optD.porPessoaFmt}] : []),
+      ];
+      const thS = 'padding:8px 12px;border:1px solid #c7d7fc;font-size:.76rem;font-weight:700;';
+      const tdS = (o) => `padding:8px 12px;border:1px solid #e5e7eb;font-size:.8rem;${o===sel?'background:#eff6ff;font-weight:700;':''}`;
+      return `<div class="section">
+        <div class="section-title">Comparativo de Tarifas</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="background:#f0f4ff">
+            <th style="${thS}text-align:left">Opcao</th>
+            <th style="${thS}text-align:right">Total (Pix)</th>
+            ${d.totalPax > 1 ? `<th style="${thS}text-align:right">Por Pessoa</th>` : ''}
+          </tr></thead>
+          <tbody>${rows.map(r=>`<tr>
+            <td style="${tdS(r.opcao)}">${esc(r.label)}${r.opcao===sel?' &#10003;':''}</td>
+            <td style="${tdS(r.opcao)};text-align:right">${esc(r.totalFmt)}</td>
+            ${d.totalPax > 1 ? `<td style="${tdS(r.opcao)};text-align:right">${esc(r.ppFmt)} / pessoa</td>` : ''}
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    })() : ''}
     <div class="section">
       <div class="section-title">Valores</div>
       <div class="valores-grid">
+        ${d.valPix && d.totalPax > 1 ? `<div class="val-card pix">
+          <div class="val-label">Por Pessoa</div>
+          <div class="val-main">${esc(d.valPix)}</div>
+        </div>` : ''}
         ${(d.valTotalPix||d.valPix)?`<div class="val-card pix">
           <div class="val-label">Total via Pix</div>
           <div class="val-main">${esc(d.valTotalPix||d.valPix)}</div>
-          ${d.valPix && d.valTotalPix && d.valTotalPix!==d.valPix && d.totalPax>1?`<div class="val-sub">${esc(d.valPix)} por pessoa</div>`:''}
         </div>`:''}
         ${d.valCartaoBase?`<div class="val-card cartao">
-          <div class="val-label">${d.juroInfo && d.juroInfo.n > 1 ? `No Cart\u00e3o &mdash; ${d.juroInfo.n} parcelas` : 'No Cart\u00e3o &mdash; \u00c0 Vista'}</div>
+          <div class="val-label">${d.juroInfo && d.juroInfo.n > 1 ? `No Cart\u00e3o &mdash; ${d.juroInfo.n}x` : 'No Cart\u00e3o &mdash; \u00c0 Vista'}</div>
           <div class="val-main">${d.juroInfo && d.juroInfo.n > 1 ? `${d.juroInfo.n}x de ${esc(d.valParcela)}` : esc(d.valCartaoBase)}</div>
-          ${d.juroInfo && d.juroInfo.n > 1 ? `<div class="val-sub juros">${d.juroInfo.semJuros ? 'Parcelado sem juros' : 'J\u00e1 com juros inclu\u00edsos'}</div>` : ''}
+          ${d.juroInfo && d.juroInfo.n > 1 && d.juroInfo.semJuros ? `<div class="val-sub">Sem juros</div>` : ''}
+          ${d.juroInfo && d.juroInfo.n > 1 && !d.juroInfo.semJuros && d.valCartaoFinal ? `<div class="val-sub" style="color:#374151">Total: ${esc(d.valCartaoFinal)}</div>` : ''}
         </div>`:''}
       </div>
     </div>
