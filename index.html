@@ -1045,6 +1045,9 @@ input[type="date"],input[type="time"]{cursor:pointer}
               <option value="Trend">
               <option value="Operadora">
               <option value="Diretamente da Cia">
+              <option value="HotelDO">
+              <option value="Patria">
+              <option value="Cativa">
             </datalist>
           </div>
           <div class="field">
@@ -1103,6 +1106,57 @@ input[type="date"],input[type="time"]{cursor:pointer}
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         Aplicar ao Formulário
       </button>
+    </div>
+    <!-- BAGAGEM ADICIONAL (R$) — para GOL/Azul/Outras -->
+    <div id="calc-bag-toggle-wrap" style="display:none;margin-top:8px">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fdf4ff;border-radius:7px;border:1px solid #e9d5ff">
+        <input type="checkbox" id="p-calc-bag-ativo" onchange="toggleBagAdd()" style="width:14px;height:14px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0">
+        <label for="p-calc-bag-ativo" style="font-size:.75rem;font-weight:600;color:#7c3aed;cursor:pointer;margin:0;user-select:none">Adicionar bagagem despachada (R$)</label>
+      </div>
+      <div id="calc-bag-campos" style="display:none;margin-top:8px">
+        <div class="field-row">
+          <div class="field">
+            <label for="p-calc-bag-custo">Custo por mala / por trecho</label>
+            <input type="text" id="p-calc-bag-custo" placeholder="R$ 350,00" oninput="calcBagAdd()">
+          </div>
+          <div class="field">
+            <label for="p-calc-bag-qtd">Qtd de malas por pax</label>
+            <select id="p-calc-bag-qtd" onchange="calcBagAdd()">
+              <option value="1">1 mala</option>
+              <option value="2">2 malas</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="p-calc-bag-trechos">Trechos com mala</label>
+          <select id="p-calc-bag-trechos" onchange="calcBagAdd()">
+            <option value="2">Ida + Volta</option>
+            <option value="1ida">Somente Ida</option>
+            <option value="1volta">Somente Volta</option>
+          </select>
+        </div>
+        <div id="calc-bag-resultado" style="display:none;margin-top:8px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div id="calc-bag-opcao-sem" onclick="calcBagAplicar('sem')" style="cursor:pointer;border:2px solid #e5e7eb;border-radius:8px;padding:10px 13px;transition:border-color .15s">
+              <div style="font-size:.68rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Sem Mala Despachada</div>
+              <div style="display:flex;align-items:baseline;gap:10px">
+                <div id="calc-bag-sem-total" style="font-size:1rem;font-weight:800;color:#14532d"></div>
+                <div id="calc-bag-sem-pessoa" style="font-size:.72rem;color:var(--mid)"></div>
+              </div>
+            </div>
+            <div id="calc-bag-opcao-com" onclick="calcBagAplicar('com')" style="cursor:pointer;border:2px solid #e5e7eb;border-radius:8px;padding:10px 13px;transition:border-color .15s">
+              <div style="font-size:.68rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Com Mala Despachada</div>
+              <div id="calc-bag-com-detalhe" style="font-size:.62rem;color:var(--mid);margin-bottom:3px"></div>
+              <div style="display:flex;align-items:baseline;gap:10px">
+                <div id="calc-bag-com-total" style="font-size:1rem;font-weight:800;color:#374151"></div>
+                <div id="calc-bag-com-pessoa" style="font-size:.72rem;color:var(--mid)"></div>
+              </div>
+              <div id="calc-bag-custo-label" style="font-size:.65rem;color:#7c3aed;margin-top:3px;font-weight:600"></div>
+            </div>
+          </div>
+          <div style="font-size:.62rem;color:var(--mid);margin-top:6px;text-align:center">Clique para aplicar ao formulario</div>
+        </div>
+      </div>
     </div>
     <!-- ANÁLISE DE LUCRO (milhas) -->
     <div id="calc-lucro-box" style="display:none;margin-top:8px;border-radius:8px;padding:14px 16px;border:1px solid #86efac;background:#f0fdf4">
@@ -2107,6 +2161,18 @@ function restaurarProposta(d) {
         if (el) el.style.borderColor = '#1a56db';
       }
     }
+    // Restaurar bagagem adicional
+    if (d.calc.bagAdd?.ativo) {
+      sv('p-calc-bag-custo',   d.calc.bagAdd.custo);
+      sv('p-calc-bag-qtd',     d.calc.bagAdd.qtd);
+      sv('p-calc-bag-trechos', d.calc.bagAdd.trechos);
+      const bagAtElR = document.getElementById('p-calc-bag-ativo');
+      if (bagAtElR) { bagAtElR.checked = true; toggleBagAdd(); }
+      if (d.calc.bagAdd.opcaoSelecionada) {
+        const el = document.getElementById('calc-bag-opcao-' + d.calc.bagAdd.opcaoSelecionada);
+        if (el) el.style.borderColor = '#7c3aed';
+      }
+    }
   }
   toggleIdadesCriancas(); toggleIdadesBebes();
   if (d.idadesCriancas) d.idadesCriancas.forEach((v,i) => sv('p-crianca-idade-'+i, v));
@@ -3062,6 +3128,8 @@ function calcCotacao() {
       const compBox = document.getElementById('calc-comp-resultado');
       document.getElementById('calc-resultado-box').style.display = 'none';
       document.getElementById('calc-lucro-box').style.display     = 'none';
+      const bagToggleWrapComp = document.getElementById('calc-bag-toggle-wrap');
+      if (bagToggleWrapComp) bagToggleWrapComp.style.display = 'none';
       if (!idaL || !idaS || !voltaL || !voltaS || !milheiro) { compBox.style.display = 'none'; return; }
       const calcTotalComp = (milhasTotal) => {
         const cm = (milhasTotal / 1000) * milheiro;
@@ -3174,6 +3242,10 @@ function calcCotacao() {
   document.getElementById('calc-max-parcelas-nota').textContent =
     custoTotalPix < 1500 ? 'Máx. 5x (valor < R$ 1.500)' : 'Máx. 10x';
   document.getElementById('calc-resultado-box').style.display = '';
+  // Mostrar toggle de bagagem adicional (apenas no modo normal, sem comparativo)
+  const bagToggleWrap = document.getElementById('calc-bag-toggle-wrap');
+  if (bagToggleWrap) bagToggleWrap.style.display = '';
+  if (document.getElementById('p-calc-bag-ativo')?.checked) calcBagAdd();
 
   // Guardar para o Aplicar
   document.getElementById('calc-resultado-box').dataset.totalPix    = custoTotalPix.toFixed(2);
@@ -3279,6 +3351,67 @@ function calcCompAplicar(opcao) {
   document.getElementById('p-val-total-pix').scrollIntoView({ behavior:'smooth', block:'center' });
 }
 
+let _calcBagOpcaoSelecionada = null;
+
+function toggleBagAdd() {
+  const ativo = document.getElementById('p-calc-bag-ativo').checked;
+  document.getElementById('calc-bag-campos').style.display = ativo ? '' : 'none';
+  if (!ativo) document.getElementById('calc-bag-resultado').style.display = 'none';
+  else calcBagAdd();
+}
+
+function calcBagAdd() {
+  const bag      = document.getElementById('calc-bag-resultado');
+  const custo    = calcParseBRL(document.getElementById('p-calc-bag-custo').value);
+  const qtd      = parseInt(document.getElementById('p-calc-bag-qtd').value) || 1;
+  const trecho   = document.getElementById('p-calc-bag-trechos').value;
+  const nTrechos = trecho === '2' ? 2 : 1;
+  const totalPax = getTotalPax();
+  const baseTotalEl = document.getElementById('calc-resultado-box');
+  const baseTotal   = parseFloat(baseTotalEl?.dataset?.totalPix) || 0;
+  if (!custo || !baseTotal) { bag.style.display = 'none'; return; }
+  const custoBagPP    = custo * qtd * nTrechos;
+  const custoBagTotal = custoBagPP * totalPax;
+  const comTotal = baseTotal + custoBagTotal;
+  const basePP   = baseTotal / totalPax;
+  const comPP    = comTotal  / totalPax;
+  const trechoLabel = trecho === '2' ? 'Ida + Volta' : trecho === '1ida' ? 'Somente Ida' : 'Somente Volta';
+  const detalhe = `${qtd} mala${qtd>1?'s':''} \xd7 ${nTrechos} trecho${nTrechos>1?'s':''} \xd7 ${totalPax} pax`;
+  document.getElementById('calc-bag-sem-total').textContent  = calcFmt(baseTotal);
+  document.getElementById('calc-bag-sem-pessoa').textContent = totalPax > 1 ? calcFmt(basePP) + ' / pessoa' : '';
+  document.getElementById('calc-bag-com-total').textContent  = calcFmt(comTotal);
+  document.getElementById('calc-bag-com-pessoa').textContent = totalPax > 1 ? calcFmt(comPP) + ' / pessoa' : '';
+  document.getElementById('calc-bag-com-detalhe').textContent = detalhe + ' (' + trechoLabel + ')';
+  document.getElementById('calc-bag-custo-label').textContent = '+ ' + calcFmt(custoBagPP) + ' por pessoa';
+  bag.dataset.baseTotal    = baseTotal.toFixed(2);
+  bag.dataset.basePP       = basePP.toFixed(2);
+  bag.dataset.comTotal     = comTotal.toFixed(2);
+  bag.dataset.comPP        = comPP.toFixed(2);
+  bag.dataset.custoBagPP   = custoBagPP.toFixed(2);
+  bag.dataset.custoBagTotal= custoBagTotal.toFixed(2);
+  bag.dataset.trechoLabel  = trechoLabel;
+  bag.dataset.detalhe      = detalhe;
+  bag.style.display = '';
+}
+
+function calcBagAplicar(opcao) {
+  const bag   = document.getElementById('calc-bag-resultado');
+  const total = opcao === 'com'
+    ? parseFloat(bag.dataset.comTotal)
+    : parseFloat(bag.dataset.baseTotal);
+  _calcBagOpcaoSelecionada = opcao;
+  document.getElementById('p-val-total-pix').value = calcFmt(total);
+  calcValorPorPessoa();
+  document.getElementById('p-val-cartao').value = calcFmt(total);
+  calcJurosCartao();
+  ['sem','com'].forEach(o => {
+    const el = document.getElementById('calc-bag-opcao-' + o);
+    if (el) el.style.borderColor = o === opcao ? '#7c3aed' : '#e5e7eb';
+  });
+  showToast('Op\xe7ao "' + (opcao === 'com' ? 'Com Mala' : 'Sem Mala') + '" aplicada!');
+  document.getElementById('p-val-total-pix').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
 function calcLimpar() {
   ['p-calc-milhas','p-calc-milheiro','p-calc-taxas-milhas',
    'p-calc-valor-vista','p-calc-fornecedor','p-calc-lucro','p-calc-taxas-real',
@@ -3305,6 +3438,22 @@ function calcLimpar() {
   const milhasWrapEl = document.getElementById('calc-milhas-field-wrap');
   if (milhasWrapEl) milhasWrapEl.style.display = '';
   _calcCompOpcaoSelecionada = null;
+  // Reset bagagem adicional
+  const bagCustoEl = document.getElementById('p-calc-bag-custo');
+  if (bagCustoEl) bagCustoEl.value = '';
+  const bagQtdEl = document.getElementById('p-calc-bag-qtd');
+  if (bagQtdEl) bagQtdEl.value = '1';
+  const bagTrEl = document.getElementById('p-calc-bag-trechos');
+  if (bagTrEl) bagTrEl.value = '2';
+  const bagAtEl2 = document.getElementById('p-calc-bag-ativo');
+  if (bagAtEl2) bagAtEl2.checked = false;
+  const bagCamposEl = document.getElementById('calc-bag-campos');
+  if (bagCamposEl) bagCamposEl.style.display = 'none';
+  const bagResEl = document.getElementById('calc-bag-resultado');
+  if (bagResEl) bagResEl.style.display = 'none';
+  const bagTogEl = document.getElementById('calc-bag-toggle-wrap');
+  if (bagTogEl) bagTogEl.style.display = 'none';
+  _calcBagOpcaoSelecionada = null;
   calcToggleTipo();
 }
 
@@ -3554,6 +3703,26 @@ function gerarProposta() {
       compOptB: document.getElementById('calc-comp-resultado')?.dataset?.optB || null,
       compOptC: document.getElementById('calc-comp-resultado')?.dataset?.optC || null,
       compOptD: document.getElementById('calc-comp-resultado')?.dataset?.optD || null,
+      bagAdd: {
+        ativo:   document.getElementById('p-calc-bag-ativo')?.checked || false,
+        custo:   document.getElementById('p-calc-bag-custo')?.value   || '',
+        qtd:     document.getElementById('p-calc-bag-qtd')?.value     || '1',
+        trechos: document.getElementById('p-calc-bag-trechos')?.value || '2',
+        opcaoSelecionada: _calcBagOpcaoSelecionada,
+        bagRes: (() => {
+          const el = document.getElementById('calc-bag-resultado');
+          if (!el || el.style.display === 'none') return null;
+          return {
+            baseTotal:   el.dataset.baseTotal,
+            basePP:      el.dataset.basePP,
+            comTotal:    el.dataset.comTotal,
+            comPP:       el.dataset.comPP,
+            custoBagPP:  el.dataset.custoBagPP,
+            trechoLabel: el.dataset.trechoLabel,
+            detalhe:     el.dataset.detalhe,
+          };
+        })(),
+      },
     },
     geradoEm: new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'})
   };
@@ -3852,6 +4021,34 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
             <td style="${tdS(r.opcao)};text-align:right">${esc(r.totalFmt)}</td>
             <td style="${tdS(r.opcao)};text-align:right">${esc(r.ppFmt)}</td>
             <td style="${tdS(r.opcao)};text-align:right">${fmtMala(r.pp - basePP)}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    })() : ''}
+    ${(d.calc?.bagAdd?.ativo && d.calc.bagAdd.bagRes) ? (()=>{
+      const b   = d.calc.bagAdd.bagRes;
+      const sel = d.calc.bagAdd.opcaoSelecionada;
+      const thS = 'padding:8px 12px;border:1px solid #e9d5ff;font-size:.76rem;font-weight:700;';
+      const tdS = (o) => `padding:8px 12px;border:1px solid #e5e7eb;font-size:.8rem;${o===sel?'background:#fdf4ff;font-weight:700;':''}`;
+      const rows = [
+        {op:'sem', label:'Sem Mala Despachada', total:b.baseTotal, pp:b.basePP, diff:0},
+        {op:'com', label:'Com Mala Despachada', total:b.comTotal,  pp:b.comPP,  diff:b.custoBagPP},
+      ];
+      return `<div class="section">
+        <div class="section-title">Comparativo de Tarifas</div>
+        <div style="font-size:.7rem;color:var(--mid);margin-bottom:8px">${esc(b.detalhe)} \u2014 ${esc(b.trechoLabel)}</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="background:#fdf4ff">
+            <th style="${thS}text-align:left">Opcao</th>
+            <th style="${thS}text-align:right">Total (Pix)</th>
+            ${d.totalPax > 1 ? `<th style="${thS}text-align:right">Por Pessoa</th>` : ''}
+            <th style="${thS}text-align:right">Custo da Mala</th>
+          </tr></thead>
+          <tbody>${rows.map(r=>`<tr>
+            <td style="${tdS(r.op)}">${esc(r.label)}${r.op===sel?' &#10003;':''}</td>
+            <td style="${tdS(r.op)};text-align:right">${calcFmt(parseFloat(r.total))}</td>
+            ${d.totalPax > 1 ? `<td style="${tdS(r.op)};text-align:right">${calcFmt(parseFloat(r.pp))} / pessoa</td>` : ''}
+            <td style="${tdS(r.op)};text-align:right">${parseFloat(r.diff)>0 ? `+ ${calcFmt(parseFloat(r.diff))} / pessoa` : '<span style="color:#6b7280">&mdash;</span>'}</td>
           </tr>`).join('')}</tbody>
         </table>
       </div>`;
