@@ -3829,25 +3829,29 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
       const optD = d.calc.compOptD ? JSON.parse(d.calc.compOptD) : null;
       const sel  = d.calc.compOpcaoSelecionada;
       const rows = [
-        {opcao:'a', label:optA.label, totalFmt:optA.totalFmt, ppFmt:optA.porPessoaFmt},
-        {opcao:'b', label:optB.label, totalFmt:optB.totalFmt, ppFmt:optB.porPessoaFmt},
-        ...(optC ? [{opcao:'c', label:optC.label, totalFmt:optC.totalFmt, ppFmt:optC.porPessoaFmt}] : []),
-        ...(optD ? [{opcao:'d', label:optD.label, totalFmt:optD.totalFmt, ppFmt:optD.porPessoaFmt}] : []),
+        {opcao:'a', label:optA.label, totalFmt:optA.totalFmt, ppFmt:optA.porPessoaFmt, pp:optA.porPessoa},
+        {opcao:'b', label:optB.label, totalFmt:optB.totalFmt, ppFmt:optB.porPessoaFmt, pp:optB.porPessoa},
+        ...(optC ? [{opcao:'c', label:optC.label, totalFmt:optC.totalFmt, ppFmt:optC.porPessoaFmt, pp:optC.porPessoa}] : []),
+        ...(optD ? [{opcao:'d', label:optD.label, totalFmt:optD.totalFmt, ppFmt:optD.porPessoaFmt, pp:optD.porPessoa}] : []),
       ];
+      const basePP  = rows[0].pp;
       const thS = 'padding:8px 12px;border:1px solid #c7d7fc;font-size:.76rem;font-weight:700;';
       const tdS = (o) => `padding:8px 12px;border:1px solid #e5e7eb;font-size:.8rem;${o===sel?'background:#eff6ff;font-weight:700;':''}`;
+      const fmtMala = (diff) => diff <= 0 ? '<span style="color:#6b7280">&mdash;</span>' : `<span style="color:#374151">+ ${calcFmt(diff)}</span>`;
       return `<div class="section">
         <div class="section-title">Comparativo de Tarifas</div>
         <table style="width:100%;border-collapse:collapse">
           <thead><tr style="background:#f0f4ff">
             <th style="${thS}text-align:left">Opcao</th>
             <th style="${thS}text-align:right">Total (Pix)</th>
-            ${d.totalPax > 1 ? `<th style="${thS}text-align:right">Por Pessoa</th>` : ''}
+            <th style="${thS}text-align:right">Por Pessoa</th>
+            <th style="${thS}text-align:right">Custo da Mala</th>
           </tr></thead>
           <tbody>${rows.map(r=>`<tr>
             <td style="${tdS(r.opcao)}">${esc(r.label)}${r.opcao===sel?' &#10003;':''}</td>
             <td style="${tdS(r.opcao)};text-align:right">${esc(r.totalFmt)}</td>
-            ${d.totalPax > 1 ? `<td style="${tdS(r.opcao)};text-align:right">${esc(r.ppFmt)} / pessoa</td>` : ''}
+            <td style="${tdS(r.opcao)};text-align:right">${esc(r.ppFmt)}</td>
+            <td style="${tdS(r.opcao)};text-align:right">${fmtMala(r.pp - basePP)}</td>
           </tr>`).join('')}</tbody>
         </table>
       </div>`;
