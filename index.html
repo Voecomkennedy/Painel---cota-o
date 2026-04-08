@@ -58,8 +58,16 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--charcoal);margi
 .toggle-juros-wrap.off{background:#fff7f7;border-color:#fca5a5}
 .toggle-track{width:38px;height:20px;border-radius:10px;background:#d1d5db;position:relative;flex-shrink:0;transition:background .2s}
 .toggle-track.on{background:#16a34a}
+.toggle-track.on-blue{background:#003366}
 .toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
-.toggle-track.on .toggle-thumb{left:20px}
+.toggle-track.on .toggle-thumb,.toggle-track.on-blue .toggle-thumb{left:20px}
+/* Parceira */
+.toggle-parceira-wrap{display:flex;align-items:center;gap:9px;cursor:pointer;padding:9px 12px;border-radius:7px;border:1px solid var(--border);background:var(--light);transition:background .15s,border-color .15s;user-select:none;margin-bottom:0}
+.toggle-parceira-wrap.on{background:#eef3fb;border-color:#a3bfee}
+.parceira-select-box{background:#eef3fb;border:1px solid #c4d4ec;border-radius:8px;padding:14px 16px;margin-top:8px}
+.parceira-select-box label{font-size:.72rem;font-weight:700;color:#4a6fa5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.operado-badge{display:inline-flex;align-items:center;gap:5px;font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;margin-left:4px}
+/* badge usado dentro da proposta PDF */
 
 input[type="text"],input[type="number"],textarea,select{
   width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:8px;
@@ -444,6 +452,27 @@ input[type="date"],input[type="time"]{cursor:pointer}
         </select>
       </div>
     </div>
+    <!-- Toggle: Operado por parceira — IDA -->
+    <div class="field">
+      <label class="toggle-parceira-wrap" id="toggle-parceira-ida-label" for="p-parceira-ida-ativo" style="display:flex">
+        <div class="toggle-track" id="parceira-ida-track"><div class="toggle-thumb"></div></div>
+        <span style="font-size:.78rem;font-weight:600;color:var(--charcoal)">Voo operado por parceira</span>
+        <span style="font-size:.7rem;color:var(--mid);font-weight:400;margin-left:2px">(code-share / alianca)</span>
+      </label>
+      <input type="checkbox" id="p-parceira-ida-ativo" onchange="toggleParceiraIda()" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0">
+      <div id="p-parceira-ida-box" class="parceira-select-box" style="display:none">
+        <label for="p-cia-operadora-ida">Companhia que vai operar o voo</label>
+        <select id="p-cia-operadora-ida">
+          <option value="">Selecione a operadora...</option>
+          <optgroup label="🇧🇷 Brasil"><option>LATAM</option><option>GOL</option><option>Azul</option><option>Passaredo</option><option>MAP Linhas Aéreas</option></optgroup>
+          <optgroup label="🌎 América do Sul"><option>Avianca</option><option>Aerolineas Argentinas</option><option>Copa Airlines</option><option>Aeromexico</option><option>Sky Airline</option><option>JetSMART</option><option>Wingo</option></optgroup>
+          <optgroup label="🇺🇸 América do Norte"><option>American Airlines</option><option>Delta Air Lines</option><option>United Airlines</option><option>Air Canada</option><option>Southwest Airlines</option><option>JetBlue</option><option>Alaska Airlines</option></optgroup>
+          <optgroup label="🌍 Europa"><option>Air France</option><option>KLM</option><option>Lufthansa</option><option>British Airways</option><option>Iberia</option><option>TAP Air Portugal</option><option>Turkish Airlines</option><option>ITA Airways</option><option>Swiss</option><option>Austrian Airlines</option><option>Finnair</option><option>SAS Scandinavian</option><option>Ryanair</option><option>easyJet</option><option>Vueling</option><option>Transavia</option><option>Air Europa</option></optgroup>
+          <optgroup label="🌙 Oriente Médio / África"><option>Emirates</option><option>Qatar Airways</option><option>Etihad Airways</option><option>Air Arabia</option><option>flydubai</option><option>Ethiopian Airlines</option><option>South African Airways</option><option>EgyptAir</option></optgroup>
+          <optgroup label="🌏 Ásia / Oceania"><option>Singapore Airlines</option><option>Cathay Pacific</option><option>Japan Airlines</option><option>ANA All Nippon Airways</option><option>Korean Air</option><option>Air China</option><option>China Southern</option><option>Thai Airways</option><option>Qantas</option><option>Air New Zealand</option></optgroup>
+        </select>
+      </div>
+    </div>
     <div class="field-row">
       <div class="field">
         <label for="p-data-ida">Data de Ida</label>
@@ -694,6 +723,27 @@ input[type="date"],input[type="time"]{cursor:pointer}
         </select>
       </div>
       <div class="field" style="visibility:hidden"></div>
+    </div>
+    <!-- Toggle: Operado por parceira — VOLTA -->
+    <div class="field">
+      <label class="toggle-parceira-wrap" id="toggle-parceira-volta-label" for="p-parceira-volta-ativo" style="display:flex">
+        <div class="toggle-track" id="parceira-volta-track"><div class="toggle-thumb"></div></div>
+        <span style="font-size:.78rem;font-weight:600;color:var(--charcoal)">Voo de volta operado por parceira</span>
+        <span style="font-size:.7rem;color:var(--mid);font-weight:400;margin-left:2px">(code-share / alianca)</span>
+      </label>
+      <input type="checkbox" id="p-parceira-volta-ativo" onchange="toggleParceiraVolta()" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0">
+      <div id="p-parceira-volta-box" class="parceira-select-box" style="display:none">
+        <label for="p-cia-operadora-volta">Companhia que vai operar o voo de volta</label>
+        <select id="p-cia-operadora-volta">
+          <option value="">Selecione a operadora...</option>
+          <optgroup label="🇧🇷 Brasil"><option>LATAM</option><option>GOL</option><option>Azul</option><option>Passaredo</option><option>MAP Linhas Aéreas</option></optgroup>
+          <optgroup label="🌎 América do Sul"><option>Avianca</option><option>Aerolineas Argentinas</option><option>Copa Airlines</option><option>Aeromexico</option><option>Sky Airline</option><option>JetSMART</option><option>Wingo</option></optgroup>
+          <optgroup label="🇺🇸 América do Norte"><option>American Airlines</option><option>Delta Air Lines</option><option>United Airlines</option><option>Air Canada</option><option>Southwest Airlines</option><option>JetBlue</option><option>Alaska Airlines</option></optgroup>
+          <optgroup label="🌍 Europa"><option>Air France</option><option>KLM</option><option>Lufthansa</option><option>British Airways</option><option>Iberia</option><option>TAP Air Portugal</option><option>Turkish Airlines</option><option>ITA Airways</option><option>Swiss</option><option>Austrian Airlines</option><option>Finnair</option><option>SAS Scandinavian</option><option>Ryanair</option><option>easyJet</option><option>Vueling</option><option>Transavia</option><option>Air Europa</option></optgroup>
+          <optgroup label="🌙 Oriente Médio / África"><option>Emirates</option><option>Qatar Airways</option><option>Etihad Airways</option><option>Air Arabia</option><option>flydubai</option><option>Ethiopian Airlines</option><option>South African Airways</option><option>EgyptAir</option></optgroup>
+          <optgroup label="🌏 Ásia / Oceania"><option>Singapore Airlines</option><option>Cathay Pacific</option><option>Japan Airlines</option><option>ANA All Nippon Airways</option><option>Korean Air</option><option>Air China</option><option>China Southern</option><option>Thai Airways</option><option>Qantas</option><option>Air New Zealand</option></optgroup>
+        </select>
+      </div>
     </div>
     <div class="field-row">
       <div class="field">
@@ -2095,6 +2145,8 @@ function restaurarProposta(d) {
   const sc = (id, v) => { const el = document.getElementById(id); if(el) el.checked = !!v; };
   sv('p-cliente', d.cliente); sv('p-orig', d.orig); sv('p-dest', d.dest);
   sv('p-cia', d.cia); sv('p-cia-volta', d.ciaVolta || ''); sv('p-classe', d.classe);
+  if (d.ciaOperadoraIda) { sc('p-parceira-ida-ativo', true); sv('p-cia-operadora-ida', d.ciaOperadoraIda); toggleParceiraIda(); }
+  if (d.ciaOperadoraVolta) { sc('p-parceira-volta-ativo', true); sv('p-cia-operadora-volta', d.ciaOperadoraVolta); toggleParceiraVolta(); }
   sv('p-data-ida', d.dataIdaISO); sv('p-voo-ida', d.vooIda);
   sv('p-hora-dep', d.depIda); sv('p-hora-cheg', d.chegIda); sv('p-duracao-ida', d.durIda);
   sv('p-parada-ida', d.paradaIda);
@@ -3457,6 +3509,22 @@ function calcLimpar() {
   calcToggleTipo();
 }
 
+function toggleParceiraIda() {
+  const checked = document.getElementById('p-parceira-ida-ativo').checked;
+  document.getElementById('parceira-ida-track').className = 'toggle-track' + (checked ? ' on-blue' : '');
+  const wrap = document.getElementById('toggle-parceira-ida-label');
+  wrap.className = 'toggle-parceira-wrap' + (checked ? ' on' : '');
+  document.getElementById('p-parceira-ida-box').style.display = checked ? 'block' : 'none';
+  if (!checked) document.getElementById('p-cia-operadora-ida').value = '';
+}
+function toggleParceiraVolta() {
+  const checked = document.getElementById('p-parceira-volta-ativo').checked;
+  document.getElementById('parceira-volta-track').className = 'toggle-track' + (checked ? ' on-blue' : '');
+  const wrap = document.getElementById('toggle-parceira-volta-label');
+  wrap.className = 'toggle-parceira-wrap' + (checked ? ' on' : '');
+  document.getElementById('p-parceira-volta-box').style.display = checked ? 'block' : 'none';
+  if (!checked) document.getElementById('p-cia-operadora-volta').value = '';
+}
 function toggleJurosUI() {
   const checked = document.getElementById('p-com-juros').checked;
   document.getElementById('juros-track').className = 'toggle-track' + (checked ? ' on' : '');
@@ -3614,6 +3682,8 @@ function gerarProposta() {
     orig, dest,
     cia:   document.getElementById('p-cia').value,
     ciaVolta: document.getElementById('p-cia-volta').value,
+    ciaOperadoraIda:   document.getElementById('p-parceira-ida-ativo').checked ? (document.getElementById('p-cia-operadora-ida').value || '') : '',
+    ciaOperadoraVolta: document.getElementById('p-parceira-volta-ativo').checked ? (document.getElementById('p-cia-operadora-volta').value || '') : '',
     classe: document.getElementById('p-classe').value,
     vooIda:   document.getElementById('p-voo-ida').value.trim(),
     dataIda:  fmtDatePT(dataIdaISO),
@@ -3912,6 +3982,7 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
             <span class="voo-tipo-badge">Ida</span>
             ${d.cia?`<span class="voo-cia">${esc(d.cia)}</span>`:''}
             ${d.vooIda?`<span class="voo-numero">Voo ${esc(d.vooIda)}</span>`:''}
+            ${d.ciaOperadoraIda?`<span style="font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;white-space:nowrap">Op. ${esc(d.ciaOperadoraIda)}</span>`:''}
           </div>
           <div style="display:flex;gap:8px;align-items:center">
             ${d.classe?`<span class="voo-classe">${esc(d.classe)}</span>`:''}
@@ -3949,6 +4020,7 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
             <span class="voo-tipo-badge volta">Volta</span>
             ${(d.ciaVolta||d.cia)?`<span class="voo-cia">${esc(d.ciaVolta||d.cia)}</span>`:''}
             ${d.vooVolta?`<span class="voo-numero">Voo ${esc(d.vooVolta)}</span>`:''}
+            ${d.ciaOperadoraVolta?`<span style="font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;white-space:nowrap">Op. ${esc(d.ciaOperadoraVolta)}</span>`:''}
           </div>
           <div style="display:flex;gap:8px;align-items:center">
             ${d.classe?`<span class="voo-classe">${esc(d.classe)}</span>`:''}
@@ -4105,6 +4177,8 @@ function limparProposta() {
   ['p-data-ida','p-data-volta'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   document.getElementById('p-cia').value = '';
   document.getElementById('p-cia-volta').value = '';
+  document.getElementById('p-parceira-ida-ativo').checked = false; toggleParceiraIda();
+  document.getElementById('p-parceira-volta-ativo').checked = false; toggleParceiraVolta();
   document.getElementById('p-classe').value = 'Economica';
   document.getElementById('p-parcelas').value = '';
   document.getElementById('p-adultos').value = '1';
