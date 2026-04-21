@@ -169,6 +169,14 @@ input[type="date"],input[type="time"]{cursor:pointer}
   .actions{flex-direction:column}
   .btn-primary,.btn-secondary{width:100%;justify-content:center}
 }
+/* Toggle Somente Ida (1 trecho) — desabilita visualmente o card de volta */
+.card-somente-ida{padding:14px 18px;background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border:1.5px solid #fdba74;border-radius:10px;margin-bottom:14px}
+.card-somente-ida label{display:flex;align-items:center;gap:12px;cursor:pointer;margin:0}
+.card-somente-ida input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#ea580c;flex-shrink:0}
+.card-somente-ida .label-title{font-size:.88rem;font-weight:700;color:#9a3412;line-height:1.2}
+.card-somente-ida .label-desc{font-size:.72rem;color:#7c2d12;margin-top:3px;line-height:1.35}
+.volta-disabled{opacity:.42;filter:grayscale(.9);pointer-events:none;position:relative;transition:opacity .2s,filter .2s}
+.volta-disabled::before{content:'DESABILITADO — VOO SOMENTE DE IDA';position:absolute;top:12px;right:14px;font-size:.65rem;font-weight:800;letter-spacing:.06em;color:#9a3412;background:#fff7ed;padding:5px 12px;border-radius:20px;border:1.5px solid #fdba74;z-index:2;pointer-events:none;box-shadow:0 2px 6px rgba(234,88,12,.15)}
 </style>
 </head>
 <body>
@@ -349,6 +357,17 @@ input[type="date"],input[type="time"]{cursor:pointer}
       <div class="section-label" style="margin-top:14px">Idades dos Bebes</div>
       <div id="idades-bebes-inputs" class="field-row" style="flex-wrap:wrap"></div>
     </div>
+  </div>
+
+  <!-- Toggle Somente Ida (1 trecho) -->
+  <div class="card-somente-ida">
+    <label for="p-somente-ida">
+      <input type="checkbox" id="p-somente-ida" onchange="toggleSomenteIda()">
+      <div style="flex:1">
+        <div class="label-title">Somente Ida (1 trecho)</div>
+        <div class="label-desc">Ative quando a proposta for de apenas um trecho. A secao de volta sera desabilitada e nao aparecera no PDF.</div>
+      </div>
+    </label>
   </div>
 
   <!-- Aereo IDA -->
@@ -625,7 +644,7 @@ input[type="date"],input[type="time"]{cursor:pointer}
   </div>
 
   <!-- Aereo VOLTA -->
-  <div class="card">
+  <div class="card" id="card-aereo-volta">
     <div class="section-label">Voo de Volta</div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
       <input type="checkbox" id="p-multitrecho" style="width:16px;height:16px;cursor:pointer;accent-color:#003366" onchange="toggleMultitrecho()">
@@ -2065,11 +2084,25 @@ function fmtDate() {
 // ── HISTORICO (localStorage) ──────────────────────────────────────────────────
 const HIST_KEY = 'vck_historico';
 function getHist() { try { return JSON.parse(localStorage.getItem(HIST_KEY)) || []; } catch { return []; } }
-function saveHist(h) { localStorage.setItem(HIST_KEY, JSON.stringify(h)); updateHistBadge(); }
+function saveHist(h) {
+  // Salva o historico com protecao anti-QuotaExceeded do localStorage
+  try {
+    localStorage.setItem(HIST_KEY, JSON.stringify(h));
+  } catch (e) {
+    if (e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014)) {
+      // localStorage cheio — alerta o usuario mas NAO apaga dados silenciosamente
+      try { showToast('Armazenamento do navegador cheio. Exporte um backup e considere limpar registros antigos.'); } catch {}
+      console.warn('[VoeComKennedy] localStorage cheio. Total registros:', h.length);
+    } else {
+      console.error('[VoeComKennedy] Erro ao salvar historico:', e);
+    }
+  }
+  updateHistBadge();
+}
 function addHist(entry) {
   const h = getHist();
   h.unshift({ ...entry, id: Date.now(), data: fmtDate() });
-  if (h.length > 300) h.pop();
+  // Sem limite de registros — historico ilimitado (protegido contra estouro em saveHist)
   saveHist(h);
 }
 function updateHistBadge() {
@@ -2336,15 +2369,22 @@ function importarBackup(file) {
       if (backup._app !== 'VoeComKennedy') {
         if (!confirm('Este arquivo não parece ser um backup do VoeComKennedy. Deseja importar mesmo assim?')) return;
       }
-      // Mesclar histórico (não sobrescreve, une os registros)
+      // Mesclar histórico (não sobrescreve, une os registros) — sem limite de registros
       if (backup[BK_KEYS[0]]) {
         try {
           const existente = getHist();
           const importado = JSON.parse(backup[BK_KEYS[0]]);
           const idsExist  = new Set(existente.map(x => x.id));
           const novos     = importado.filter(x => !idsExist.has(x.id));
-          const merged    = [...novos, ...existente].slice(0, 100);
-          localStorage.setItem(BK_KEYS[0], JSON.stringify(merged));
+          const merged    = [...novos, ...existente];
+          try {
+            localStorage.setItem(BK_KEYS[0], JSON.stringify(merged));
+          } catch (err) {
+            if (err && (err.name === 'QuotaExceededError' || err.code === 22 || err.code === 1014)) {
+              showToast('Armazenamento cheio durante a importacao. Parte dos registros pode nao ter sido salva.');
+              console.warn('[VoeComKennedy] Quota excedida no import. Registros tentados:', merged.length);
+            } else { throw err; }
+          }
         } catch { localStorage.setItem(BK_KEYS[0], backup[BK_KEYS[0]]); }
       }
       // Restaurar outras chaves (base_url, whatsapp, seq) apenas se não existir local
@@ -3517,6 +3557,18 @@ function toggleParceiraIda() {
   document.getElementById('p-parceira-ida-box').style.display = checked ? 'block' : 'none';
   if (!checked) document.getElementById('p-cia-operadora-ida').value = '';
 }
+function toggleSomenteIda() {
+  const ativo = document.getElementById('p-somente-ida').checked;
+  const cardVolta = document.getElementById('card-aereo-volta');
+  if (!cardVolta) return;
+  if (ativo) {
+    cardVolta.classList.add('volta-disabled');
+    cardVolta.querySelectorAll('input, select, textarea, button').forEach(el => { el.disabled = true; });
+  } else {
+    cardVolta.classList.remove('volta-disabled');
+    cardVolta.querySelectorAll('input, select, textarea, button').forEach(el => { el.disabled = false; });
+  }
+}
 function toggleParceiraVolta() {
   const checked = document.getElementById('p-parceira-volta-ativo').checked;
   document.getElementById('parceira-volta-track').className = 'toggle-track' + (checked ? ' on-blue' : '');
@@ -3728,6 +3780,7 @@ function gerarProposta() {
     trocaVolta3: document.getElementById('p-troca-volta3').checked,
     trocaVolta3Dest: document.getElementById('p-troca-volta3-dest').value.trim(),
     multitrecho: document.getElementById('p-multitrecho').checked,
+    somenteIda: document.getElementById('p-somente-ida').checked,
     origVolta: document.getElementById('p-orig-volta').value.trim(),
     destVolta: document.getElementById('p-dest-volta').value.trim(),
     bagMao:  document.getElementById('p-bag-mao').value,
@@ -4012,7 +4065,7 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
         </div>
       </div>
     </div>
-    <div class="section">
+    ${!d.somenteIda ? `<div class="section">
       <div class="section-title">Voo de Volta</div>
       <div class="voo-card">
         <div class="voo-card-header">
@@ -4048,7 +4101,7 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
           </div>
         </div>
       </div>
-    </div>
+    </div>` : ''}
     ${d.hotelNome?`
     <div class="section">
       <div class="section-title">Hospedagem</div>
