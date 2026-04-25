@@ -5,185 +5,1035 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VoeComKennedy — Painel</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 :root{
-  --navy:#003366;--navy2:#00254d;--charcoal:#1a1a1a;--mid:#6b6b6b;
-  --light:#f5f5f7;--border:#e0e0e0;--white:#fff;--green:#1a7a42;
-  --red:#c0392b;--radius:10px;--font:'Inter',Helvetica,Arial,sans-serif;
+  --navy:#11233b;
+  --navy2:#0c1a2d;
+  --navy3:#081321;
+  --accent:#2f6fed;
+  --accent-soft:rgba(47,111,237,.12);
+  --charcoal:#0f1728;
+  --mid:#536179;
+  --soft:#7f8aa1;
+  --light:#f3f6fb;
+  --light-2:#eef2f8;
+  --bg:#edf2f8;
+  --bg-strong:#e7edf6;
+  --panel:rgba(255,255,255,.9);
+  --panel-strong:#ffffff;
+  --border:#d7e0ec;
+  --border2:#c5d1e1;
+  --border-strong:#b8c7da;
+  --white:#ffffff;
+  --green:#15803d;
+  --green-soft:#ecfdf3;
+  --amber:#b7791f;
+  --amber-soft:#fff7e8;
+  --red:#b42318;
+  --red-soft:#fff0ef;
+  --dark:#0f1728;
+  --radius:22px;
+  --radius-sm:14px;
+  --font:'Manrope',Helvetica,Arial,sans-serif;
+  --sh-sm:0 10px 24px rgba(15,23,40,.05);
+  --sh:0 16px 40px rgba(15,23,40,.07);
+  --sh-lg:0 24px 60px rgba(15,23,40,.1);
 }
-html{font-size:16px}
-body{font-family:var(--font);background:var(--light);color:var(--charcoal);min-height:100vh;display:flex;flex-direction:column}
 
-/* HEADER */
-header{background:var(--white);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo{font-size:.9rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
-.badge{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);background:var(--light);border:1px solid var(--border);padding:4px 10px;border-radius:20px}
+html{font-size:16px;background:var(--bg)}
+body{
+  font-family:var(--font);
+  color:var(--charcoal);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(circle at top left,rgba(47,111,237,.08),transparent 28%),
+    radial-gradient(circle at top right,rgba(17,35,59,.08),transparent 24%),
+    linear-gradient(180deg,#f5f8fc 0%,#edf2f8 42%,#e9eff7 100%);
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.36),rgba(255,255,255,0)),
+    radial-gradient(circle at 20% 0%,rgba(255,255,255,.6),transparent 30%);
+  z-index:-2;
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(rgba(17,35,59,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(17,35,59,.025) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.18),transparent 48%);
+  z-index:-1;
+}
 
-/* TABS */
-.tab-bar{background:var(--white);border-bottom:1px solid var(--border);display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+a{color:inherit}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:90;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  min-height:78px;
+  padding:18px 28px;
+  background:linear-gradient(180deg,rgba(8,19,33,.94),rgba(11,24,41,.88));
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  box-shadow:0 16px 36px rgba(8,19,33,.22);
+}
+.header-brand{display:flex;align-items:center;gap:14px}
+.header-mark{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#2f6fed 0%,#183d84 100%);
+  color:#fff;
+  font-size:.92rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  box-shadow:0 14px 30px rgba(47,111,237,.28);
+}
+.header-copy{display:flex;flex-direction:column;gap:2px}
+.logo{font-size:.92rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fff}
+.header-sub{font-size:.72rem;color:rgba(255,255,255,.58);font-weight:600}
+.header-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.header-meta-card{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  padding:10px 14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+.header-meta-label{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.42);font-weight:700}
+.header-meta-value{font-size:.74rem;color:#fff;font-weight:700}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#dbe7ff;
+  background:rgba(47,111,237,.18);
+  border:1px solid rgba(112,155,255,.26);
+}
+.badge::before{
+  content:'';
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#6ee7b7;
+  box-shadow:0 0 0 5px rgba(110,231,183,.12);
+}
+
+.tab-bar{
+  position:sticky;
+  top:78px;
+  z-index:70;
+  display:flex;
+  gap:12px;
+  padding:14px 24px 0;
+  overflow-x:auto;
+  scrollbar-width:none;
+  background:linear-gradient(180deg,rgba(237,242,248,.92),rgba(237,242,248,.72));
+  backdrop-filter:blur(18px);
+}
 .tab-bar::-webkit-scrollbar{display:none}
-.tab-btn{flex:0 0 auto;padding:14px 22px;font-family:var(--font);font-size:.8rem;font-weight:600;letter-spacing:.04em;color:var(--mid);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap;display:flex;align-items:center;gap:7px}
-.tab-btn.active{color:var(--navy);border-bottom-color:var(--navy)}
+.tab-btn{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px;
+  min-height:52px;
+  border:none;
+  border-radius:18px 18px 0 0;
+  background:rgba(255,255,255,.46);
+  color:var(--soft);
+  font-family:var(--font);
+  font-size:.76rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  cursor:pointer;
+  white-space:nowrap;
+  border:1px solid transparent;
+  transition:transform .18s ease,background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.tab-btn:hover{
+  color:var(--navy);
+  background:rgba(255,255,255,.8);
+  border-color:rgba(184,199,218,.72);
+  transform:translateY(-1px);
+}
+.tab-btn.active{
+  color:var(--navy);
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.88));
+  border-color:rgba(184,199,218,.9);
+  box-shadow:0 -1px 0 rgba(255,255,255,.8) inset,var(--sh-sm);
+}
 .tab-btn svg{flex-shrink:0}
 
-/* PANELS */
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
-/* MAIN */
-main{flex:1;max-width:700px;width:100%;margin:32px auto;padding:0 20px 80px}
-h2{font-size:1.25rem;font-weight:700;color:var(--charcoal);margin-bottom:5px}
-.subtitle{font-size:.85rem;color:var(--mid);margin-bottom:28px}
+main{
+  flex:1;
+  width:100%;
+  max-width:1360px;
+  margin:0 auto;
+  padding:28px 24px 96px;
+}
+h2{
+  font-size:1.65rem;
+  font-weight:800;
+  color:var(--charcoal);
+  letter-spacing:-.04em;
+  margin-bottom:10px;
+}
+.subtitle{
+  max-width:760px;
+  font-size:.95rem;
+  color:var(--mid);
+  line-height:1.65;
+  margin-bottom:28px;
+}
 
-/* CARDS */
-.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
-.config-card{background:#eef3fb;border:1px solid #c4d4ec;border-radius:var(--radius);padding:20px 24px;margin-bottom:20px}
-.config-tip{font-size:.73rem;color:#4a6fa5;margin-top:8px;line-height:1.5}
-.config-tip strong{font-weight:600}
+.dashboard-page{display:flex;flex-direction:column;gap:24px}
+.page-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,.8fr);
+  gap:22px;
+  align-items:stretch;
+}
+.page-hero-main,
+.page-hero-side{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  border:1px solid rgba(184,199,218,.82);
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(246,249,253,.86));
+  box-shadow:var(--sh);
+}
+.page-hero-main{padding:28px 30px}
+.page-hero-main::before,
+.page-hero-side::before{
+  content:'';
+  position:absolute;
+  inset:-2px auto auto -2px;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(47,111,237,.18),transparent 72%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:16px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(184,199,218,.8);
+  background:rgba(255,255,255,.82);
+  font-size:.66rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--mid);
+}
+.hero-eyebrow::before{
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+}
+.hero-copy h1{
+  font-size:clamp(1.9rem,2vw,2.7rem);
+  line-height:1.02;
+  letter-spacing:-.06em;
+  color:var(--charcoal);
+  margin-bottom:12px;
+}
+.hero-copy p{
+  max-width:720px;
+  color:var(--mid);
+  line-height:1.7;
+  font-size:.94rem;
+}
+.hero-kpis{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.metric-card{
+  padding:18px 18px 16px;
+  border-radius:20px;
+  border:1px solid rgba(184,199,218,.86);
+  background:rgba(255,255,255,.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+}
+.metric-card.positive{background:linear-gradient(180deg,var(--green-soft),rgba(255,255,255,.82));border-color:rgba(34,197,94,.24)}
+.metric-card.attention{background:linear-gradient(180deg,var(--amber-soft),rgba(255,255,255,.84));border-color:rgba(217,119,6,.24)}
+.metric-card.risk{background:linear-gradient(180deg,var(--red-soft),rgba(255,255,255,.84));border-color:rgba(220,38,38,.22)}
+.metric-label{
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--soft);
+  margin-bottom:10px;
+}
+.metric-value{
+  font-size:1.42rem;
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.05em;
+  color:var(--charcoal);
+}
+.metric-sub{
+  margin-top:8px;
+  font-size:.76rem;
+  color:var(--mid);
+  line-height:1.55;
+}
+.page-hero-side{
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:18px;
+}
+.hero-side-label{
+  font-size:.66rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--soft);
+}
+.hero-side-title{
+  font-size:1.28rem;
+  font-weight:800;
+  letter-spacing:-.04em;
+  color:var(--charcoal);
+}
+.hero-side-copy{
+  font-size:.88rem;
+  line-height:1.7;
+  color:var(--mid);
+}
+.hero-side-stack{display:flex;flex-direction:column;gap:12px}
+.status-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  width:max-content;
+  padding:9px 12px;
+  border-radius:999px;
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  border:1px solid rgba(184,199,218,.8);
+  color:var(--navy);
+  background:rgba(255,255,255,.82);
+}
+.status-chip::before{
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+}
+.status-chip.positive{color:var(--green);background:var(--green-soft);border-color:rgba(34,197,94,.22)}
+.status-chip.positive::before{background:var(--green)}
+.status-chip.attention{color:var(--amber);background:var(--amber-soft);border-color:rgba(217,119,6,.24)}
+.status-chip.attention::before{background:var(--amber)}
+.status-chip.risk{color:var(--red);background:var(--red-soft);border-color:rgba(220,38,38,.22)}
+.status-chip.risk::before{background:var(--red)}
+.hero-side-highlights{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.hero-side-highlight{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:18px;
+  background:rgba(17,35,59,.04);
+  border:1px solid rgba(184,199,218,.68);
+}
+.hero-side-highlight-index{
+  flex:0 0 28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid rgba(184,199,218,.8);
+  color:var(--navy);
+  font-size:.72rem;
+  font-weight:800;
+}
+.hero-side-highlight span{
+  font-size:.82rem;
+  color:var(--mid);
+  line-height:1.55;
+}
 
-.section-label{font-size:.68rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--mid);margin-bottom:18px;display:flex;align-items:center;gap:8px}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:24px;
+  align-items:start;
+}
+.dashboard-form-column{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  min-width:0;
+}
+.dashboard-form-column>.card,
+.dashboard-form-column>.config-card,
+.dashboard-form-column>.card-somente-ida,
+.dashboard-form-column>.output-card,
+.dashboard-form-column>.actions{margin:0}
+#panel-hotel .dashboard-form-column>.output-card{order:-1}
+.dashboard-side-column{
+  position:sticky;
+  top:146px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.dashboard-rail-card{
+  padding:22px;
+  border-radius:24px;
+  border:1px solid rgba(184,199,218,.84);
+  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(247,249,253,.82));
+  box-shadow:var(--sh-sm);
+}
+.rail-overline{
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--soft);
+  margin-bottom:10px;
+}
+.rail-title{
+  font-size:1.05rem;
+  font-weight:800;
+  letter-spacing:-.04em;
+  color:var(--charcoal);
+  margin-bottom:8px;
+}
+.rail-copy{
+  font-size:.84rem;
+  line-height:1.65;
+  color:var(--mid);
+}
+.rail-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:16px;
+}
+.rail-list-item{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.rail-list-item::before{
+  content:'';
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  margin-top:6px;
+  background:linear-gradient(135deg,var(--accent),#1d4ed8);
+  box-shadow:0 0 0 5px rgba(47,111,237,.08);
+}
+.rail-list-item span{
+  font-size:.82rem;
+  color:var(--mid);
+  line-height:1.55;
+}
 
-/* FIELDS */
+.card,
+.config-card,
+.output-card,
+.hist-item{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(248,250,253,.88));
+  border:1px solid rgba(184,199,218,.84);
+  border-radius:24px;
+  padding:26px;
+  box-shadow:var(--sh-sm);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.card:hover,
+.config-card:hover,
+.hist-item:hover{
+  transform:translateY(-1px);
+  box-shadow:var(--sh);
+  border-color:rgba(162,180,203,.95);
+}
+.card::before,
+.config-card::before,
+.output-card::before,
+.hist-item::before{
+  content:'';
+  position:absolute;
+  inset:0 0 auto 0;
+  height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(255,255,255,0));
+}
+.config-card{background:linear-gradient(135deg,rgba(47,111,237,.08),rgba(255,255,255,.92))}
+.config-tip{font-size:.76rem;color:#39557d;margin-top:10px;line-height:1.7}
+.config-tip strong{font-weight:800}
+
+.section-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+  font-size:.64rem;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--soft);
+}
+.section-label::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,rgba(184,199,218,.7),rgba(184,199,218,0));
+}
+
 .field{margin-bottom:18px}
 .field:last-child{margin-bottom:0}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-@media(max-width:480px){.field-row,.field-row-3{grid-template-columns:1fr}}
-label{display:block;font-size:.78rem;font-weight:600;color:var(--charcoal);margin-bottom:6px}
-.label-hint{font-size:.7rem;color:var(--mid);font-weight:400;margin-left:5px}
-.toggle-juros-wrap{display:flex;align-items:center;gap:9px;cursor:pointer;padding:9px 12px;border-radius:7px;border:1px solid var(--border);background:var(--light);transition:background .15s,border-color .15s;user-select:none}
-.toggle-juros-wrap.on{background:#f0fdf4;border-color:#86efac}
-.toggle-juros-wrap.off{background:#fff7f7;border-color:#fca5a5}
-.toggle-track{width:38px;height:20px;border-radius:10px;background:#d1d5db;position:relative;flex-shrink:0;transition:background .2s}
-.toggle-track.on{background:#16a34a}
-.toggle-track.on-blue{background:#003366}
-.toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
-.toggle-track.on .toggle-thumb,.toggle-track.on-blue .toggle-thumb{left:20px}
-/* Parceira */
-.toggle-parceira-wrap{display:flex;align-items:center;gap:9px;cursor:pointer;padding:9px 12px;border-radius:7px;border:1px solid var(--border);background:var(--light);transition:background .15s,border-color .15s;user-select:none;margin-bottom:0}
-.toggle-parceira-wrap.on{background:#eef3fb;border-color:#a3bfee}
-.parceira-select-box{background:#eef3fb;border:1px solid #c4d4ec;border-radius:8px;padding:14px 16px;margin-top:8px}
-.parceira-select-box label{font-size:.72rem;font-weight:700;color:#4a6fa5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.operado-badge{display:inline-flex;align-items:center;gap:5px;font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;margin-left:4px}
-/* badge usado dentro da proposta PDF */
-
-input[type="text"],input[type="number"],textarea,select{
-  width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:8px;
-  font-family:var(--font);font-size:.875rem;color:var(--charcoal);background:var(--white);
-  transition:border-color .2s,box-shadow .2s;outline:none;appearance:none
+.field-row,.field-row-3{
+  display:grid;
+  gap:14px;
+  align-items:start;
 }
-input:focus,textarea:focus,select:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(0,51,102,.08)}
-input::placeholder,textarea::placeholder{color:#bbb;font-weight:400}
-textarea{resize:vertical;min-height:80px;line-height:1.5}
-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b6b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.field-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+.field-row-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--mid);
+}
+.label-hint{
+  margin-left:6px;
+  font-size:.72rem;
+  font-weight:600;
+  text-transform:none;
+  letter-spacing:0;
+  color:var(--soft);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+textarea,
+select{
+  width:100%;
+  min-height:50px;
+  padding:13px 16px;
+  border:1px solid rgba(197,209,225,.95);
+  border-radius:16px;
+  outline:none;
+  appearance:none;
+  -webkit-appearance:none;
+  background:rgba(248,250,253,.96);
+  color:var(--charcoal);
+  font-family:var(--font);
+  font-size:.92rem;
+  font-weight:600;
+  transition:border-color .16s ease,box-shadow .16s ease,background .16s ease,transform .16s ease;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+input:hover,textarea:hover,select:hover{border-color:rgba(162,180,203,.96);background:#fff}
+input:focus,textarea:focus,select:focus{
+  border-color:rgba(47,111,237,.62);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(47,111,237,.12);
+}
+input::placeholder,textarea::placeholder{color:#95a0b4;font-weight:500}
+textarea{resize:vertical;min-height:112px;line-height:1.68}
+select{
+  cursor:pointer;
+  padding-right:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23536179' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+}
+input[readonly],input[readonly]:focus{
+  color:var(--mid);
+  background:linear-gradient(180deg,#f3f6fb,#edf2f8);
+  border-color:rgba(197,209,225,.84);
+  box-shadow:none;
+}
+input[type="checkbox"]{accent-color:var(--accent)}
 
 .img-grid{display:grid;grid-template-columns:1fr;gap:10px}
-.img-field{display:flex;align-items:center;gap:10px}
-.img-num{font-size:.72rem;font-weight:700;color:var(--mid);width:16px;flex-shrink:0;text-align:right}
-.prefix{font-size:.875rem;color:var(--mid);white-space:nowrap;padding:10px 0}
-.wa-field{display:flex;align-items:center;gap:8px}
+.img-field{display:flex;align-items:center;gap:12px}
+.img-num{
+  width:18px;
+  flex-shrink:0;
+  text-align:right;
+  font-size:.64rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--soft);
+}
+.prefix{padding:0 0 0 2px;font-size:.95rem;font-weight:800;color:var(--mid)}
+.wa-field{display:flex;align-items:center;gap:10px}
 
-/* ESCALA */
-.escala-box{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:10px}
+.escala-box{
+  background:linear-gradient(180deg,#f6f8fc,#eef3f8);
+  border:1px solid rgba(197,209,225,.9);
+  border-radius:18px;
+  padding:18px;
+  margin-top:12px;
+}
 .escala-box .section-label{margin-bottom:12px}
 
-/* IATA AUTOCOMPLETE */
 .iata-wrap{position:relative}
-.iata-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:200;max-height:200px;overflow-y:auto;display:none}
+.iata-dropdown{
+  position:absolute;
+  top:calc(100% + 6px);
+  left:0;
+  right:0;
+  z-index:200;
+  display:none;
+  max-height:260px;
+  overflow-y:auto;
+  border:1px solid rgba(184,199,218,.92);
+  border-radius:18px;
+  background:rgba(255,255,255,.96);
+  box-shadow:var(--sh-lg);
+  backdrop-filter:blur(16px);
+}
 .iata-dropdown.open{display:block}
-.iata-item{padding:9px 13px;cursor:pointer;font-size:.82rem;color:var(--charcoal);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--light)}
+.iata-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(232,237,244,.92);
+  color:var(--charcoal);
+  font-size:.84rem;
+  cursor:pointer;
+}
 .iata-item:last-child{border-bottom:none}
-.iata-item:hover{background:var(--light)}
-.iata-code{font-weight:700;color:var(--navy);font-size:.78rem;min-width:34px}
-.iata-name{color:var(--mid);font-size:.78rem}
-/* DATE/TIME inputs */
-input[type="date"],input[type="time"]{cursor:pointer}
-/* ACTIONS */
-.actions{display:flex;gap:12px;margin-top:4px;flex-wrap:wrap}
-.btn-primary{flex:1;min-width:140px;padding:12px 22px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-family:var(--font);font-size:.85rem;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-primary:hover{background:var(--navy2)}
-.btn-primary:active{transform:scale(.98)}
-.btn-secondary{padding:12px 18px;background:transparent;color:var(--charcoal);border:1px solid var(--border);border-radius:8px;font-family:var(--font);font-size:.85rem;font-weight:500;cursor:pointer;transition:border-color .2s,background .2s;display:flex;align-items:center;gap:7px}
-.btn-secondary:hover{border-color:var(--charcoal);background:var(--light)}
+.iata-item:hover{background:#f4f7fb}
+.iata-code{
+  min-width:40px;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.1em;
+  color:var(--accent);
+}
+.iata-name{font-size:.78rem;color:var(--mid)}
 
-/* OUTPUT */
-.output-card{display:none;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:20px}
-.output-card.visible{display:block}
-.output-header{padding:14px 22px;background:var(--navy);display:flex;align-items:center;justify-content:space-between}
-.output-header span{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)}
-.output-status{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#7ee89a;font-weight:600}
-.pulse{width:6px;height:6px;border-radius:50%;background:#7ee89a}
-.output-body{padding:18px 22px}
-.url-label{font-size:.68rem;font-weight:700;color:var(--navy);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase}
-.url-display{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px}
-.url-icon{flex-shrink:0;margin-top:2px;color:var(--mid)}
-.url-text{font-family:'Courier New',monospace;font-size:.7rem;color:var(--mid);word-break:break-all;line-height:1.7;flex:1}
-.url-meta{margin-bottom:12px}
-.url-size-badge{font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:12px;background:#e8f5e9;color:#2e7d32;letter-spacing:.05em}
-.url-size-badge.warn{background:#fff3e0;color:#e65100}
-.copy-actions{display:flex;gap:10px;flex-wrap:wrap}
-.btn-copy{display:flex;align-items:center;gap:7px;padding:10px 16px;background:var(--navy);color:var(--white);border:none;border-radius:7px;font-family:var(--font);font-size:.78rem;font-weight:700;cursor:pointer;transition:background .2s}
-.btn-copy:hover{background:var(--navy2)}
-.btn-copy.copied{background:var(--green)}
-.btn-preview{display:flex;align-items:center;gap:7px;padding:10px 16px;background:transparent;color:var(--charcoal);border:1px solid var(--border);border-radius:7px;font-family:var(--font);font-size:.78rem;font-weight:500;cursor:pointer;text-decoration:none;transition:border-color .2s}
-.btn-preview:hover{border-color:var(--charcoal)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+.btn-primary,
+.btn-secondary,
+.btn-copy,
+.btn-preview,
+.btn-hist-copy,
+.btn-hist-open,
+.btn-hist-del{
+  min-height:50px;
+  border-radius:16px;
+  font-family:var(--font);
+  font-size:.76rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  cursor:pointer;
+  transition:transform .16s ease,box-shadow .16s ease,background .16s ease,border-color .16s ease,color .16s ease;
+}
+.btn-primary,
+.btn-copy,
+.btn-hist-copy{
+  flex:1;
+  min-width:176px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px 24px;
+  color:#fff;
+  border:none;
+  background:linear-gradient(135deg,#19365d 0%,#122744 48%,#2f6fed 100%);
+  box-shadow:0 16px 28px rgba(18,39,68,.18);
+}
+.btn-primary:hover,.btn-copy:hover,.btn-hist-copy:hover{
+  transform:translateY(-1px);
+  box-shadow:0 20px 34px rgba(18,39,68,.24);
+}
+.btn-primary:active,.btn-copy:active,.btn-hist-copy:active{transform:translateY(0)}
+.btn-secondary,
+.btn-preview,
+.btn-hist-del{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px 18px;
+  color:var(--mid);
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(197,209,225,.98);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.84);
+}
+.btn-secondary:hover,.btn-preview:hover,.btn-hist-del:hover{
+  color:var(--charcoal);
+  border-color:rgba(162,180,203,.94);
+  background:#fff;
+}
+.btn-copy.copied,
+.btn-hist-copy.copied,
+.btn-hist-open{
+  background:linear-gradient(135deg,#15803d,#16a34a);
+  color:#fff;
+  border:none;
+}
+.btn-hist-open:hover{box-shadow:0 18px 28px rgba(22,163,74,.18)}
+.btn-hist-del{color:var(--red);border-color:rgba(220,38,38,.18);background:rgba(255,240,239,.8)}
+.btn-hist-del:hover{background:rgba(255,240,239,.95);border-color:rgba(220,38,38,.3)}
 
-/* HISTORICO */
-.hist-empty{text-align:center;padding:48px 24px;color:var(--mid)}
-.hist-empty svg{margin-bottom:14px;opacity:.3}
-.hist-empty p{font-size:.875rem}
-.hist-list{display:flex;flex-direction:column;gap:12px}
-.hist-item{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;flex-direction:column;gap:10px}
-.hist-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.hist-item-info{}
-.hist-nome{font-size:.9rem;font-weight:700;color:var(--charcoal);margin-bottom:3px}
-.hist-sub{font-size:.75rem;color:var(--mid);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hist-tag{font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--light);border:1px solid var(--border);color:var(--mid);letter-spacing:.05em;text-transform:uppercase}
-.hist-tag.hotel{background:#e8f0fe;border-color:#c5d3f7;color:#1a56db}
-.hist-tag.proposta{background:#fde8f0;border-color:#f7c5d3;color:#c0185c}
-.hist-tag.voucher{background:#e8fdf0;border-color:#a7f3d0;color:#065f46}
-.hist-actions{display:flex;gap:8px;flex-shrink:0}
-.btn-hist-copy{display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--navy);color:var(--white);border:none;border-radius:6px;font-family:var(--font);font-size:.73rem;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
-.btn-hist-copy:hover{background:var(--navy2)}
-.btn-hist-copy.copied{background:var(--green)}
-.btn-hist-del{display:flex;align-items:center;padding:7px 10px;background:transparent;color:#c0392b;border:1px solid #f5c6c6;border-radius:6px;font-family:var(--font);font-size:.73rem;cursor:pointer;transition:background .2s}
-.btn-hist-del:hover{background:#fdf0f0}
-.btn-hist-open{display:flex;align-items:center;gap:5px;padding:7px 12px;background:#166534;color:#fff;border:none;border-radius:6px;font-family:var(--font);font-size:.73rem;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
-.btn-hist-open:hover{background:#14532d}
-.hist-url{font-family:'Courier New',monospace;font-size:.65rem;color:var(--mid);word-break:break-all;background:var(--light);border-radius:5px;padding:8px 10px;border:1px solid var(--border)}
-.hist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.hist-count{font-size:.78rem;color:var(--mid);font-weight:500}
-.btn-clear-all{font-size:.73rem;color:var(--red);background:none;border:none;cursor:pointer;font-family:var(--font);font-weight:600;padding:4px 8px;border-radius:5px;transition:background .2s}
-.btn-clear-all:hover{background:#fdf0f0}
+.toggle-juros-wrap,.toggle-parceira-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:18px;
+  border:1px solid rgba(197,209,225,.9);
+  background:linear-gradient(180deg,#f7f9fc,#eef3f8);
+  user-select:none;
+  cursor:pointer;
+  transition:border-color .16s ease,background .16s ease;
+}
+.toggle-juros-wrap.on{background:linear-gradient(180deg,#f1fcf5,#e9f9ef);border-color:rgba(34,197,94,.22)}
+.toggle-juros-wrap.off{background:linear-gradient(180deg,#fff4f3,#fff0ef);border-color:rgba(220,38,38,.18)}
+.toggle-parceira-wrap.on{background:linear-gradient(180deg,#eff5ff,#edf4fe);border-color:rgba(59,130,246,.2)}
+.toggle-track{
+  position:relative;
+  flex-shrink:0;
+  width:40px;
+  height:22px;
+  border-radius:999px;
+  background:#c9d4e3;
+  transition:background .2s ease;
+}
+.toggle-track.on{background:#16a34a}
+.toggle-track.on-blue{background:var(--accent)}
+.toggle-thumb{
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 7px rgba(15,23,40,.22);
+  transition:left .2s ease;
+}
+.toggle-track.on .toggle-thumb,.toggle-track.on-blue .toggle-thumb{left:21px}
+.parceira-select-box{
+  margin-top:10px;
+  padding:16px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#eef5ff,#f8fbff);
+  border:1px solid rgba(147,197,253,.34);
+}
+.parceira-select-box label{color:#275dbd}
+.operado-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-left:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:.58rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#1d4ed8;
+  background:#eaf1ff;
+  border:1px solid rgba(59,130,246,.22);
+}
 
-/* TOAST */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--charcoal);color:var(--white);padding:11px 20px;border-radius:8px;font-size:.78rem;font-weight:600;letter-spacing:.02em;opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;z-index:999;white-space:nowrap;pointer-events:none}
+.output-card{display:none;padding:0}
+.output-card.visible{display:block;animation:lift-in .22s ease}
+@keyframes lift-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.output-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:18px 22px;
+  background:linear-gradient(135deg,#0d1d31,#112744 58%,#214f9f);
+}
+.output-header span{font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.56)}
+.output-status{display:flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;color:#bbf7d0}
+.pulse{width:7px;height:7px;border-radius:50%;background:#34d399;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.38}}
+.output-body{padding:22px}
+.url-label{margin-bottom:10px;font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+.url-display{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:16px;
+  margin-bottom:12px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#f6f8fc,#eef3f8);
+  border:1px solid rgba(197,209,225,.9);
+}
+.url-icon{color:var(--soft);margin-top:2px;flex-shrink:0}
+.url-text{
+  flex:1;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.72rem;
+  line-height:1.72;
+  color:var(--mid);
+  word-break:break-all;
+}
+.url-meta{margin-bottom:14px}
+.url-size-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:4px 11px;
+  border-radius:999px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  background:var(--green-soft);
+  color:var(--green);
+}
+.url-size-badge.warn{background:var(--amber-soft);color:var(--amber)}
+.copy-actions{display:flex;flex-wrap:wrap;gap:10px}
+
+.hist-empty{text-align:center;padding:68px 24px;color:var(--soft)}
+.hist-empty svg{margin-bottom:16px;opacity:.24}
+.hist-empty p{font-size:.94rem;line-height:1.7}
+.hist-list{display:flex;flex-direction:column;gap:14px}
+.hist-item{display:flex;flex-direction:column;gap:14px}
+.hist-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.hist-nome{font-size:1rem;font-weight:800;color:var(--charcoal);margin-bottom:4px}
+.hist-sub{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.76rem;color:var(--mid)}
+.hist-tag{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:#f3f6fb;
+  border:1px solid rgba(197,209,225,.9);
+}
+.hist-tag.hotel{background:#eef5ff;border-color:rgba(59,130,246,.22);color:#1d4ed8}
+.hist-tag.proposta{background:#fff7e8;border-color:rgba(245,158,11,.22);color:#b7791f}
+.hist-tag.voucher{background:var(--green-soft);border-color:rgba(34,197,94,.18);color:var(--green)}
+.hist-actions{display:flex;flex-wrap:wrap;gap:8px;flex-shrink:0}
+.hist-url{
+  padding:12px 14px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#f6f8fc,#eef3f8);
+  border:1px solid rgba(197,209,225,.9);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.68rem;
+  color:var(--mid);
+  line-height:1.66;
+  word-break:break-all;
+}
+.hist-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.hist-count{font-size:.76rem;font-weight:700;color:var(--mid)}
+.btn-clear-all{
+  min-height:38px;
+  padding:0 12px;
+  border:none;
+  border-radius:12px;
+  background:rgba(255,240,239,.72);
+  color:var(--red);
+  font-family:var(--font);
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  cursor:pointer;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:30px;
+  z-index:999;
+  transform:translateX(-50%) translateY(80px);
+  padding:13px 18px;
+  border-radius:16px;
+  background:rgba(8,19,33,.94);
+  color:#fff;
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  box-shadow:0 20px 40px rgba(8,19,33,.22);
+  transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;
+}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-@media(max-width:480px){
-  main{margin:20px auto}
-  .card,.config-card{padding:20px 16px}
-  h2{font-size:1.1rem}
-  .actions{flex-direction:column}
-  .btn-primary,.btn-secondary{width:100%;justify-content:center}
+.card-somente-ida{
+  padding:16px 20px;
+  border-radius:22px;
+  border:1px solid rgba(245,158,11,.22);
+  background:linear-gradient(135deg,#fff7e8,#fffdf7);
 }
-/* Toggle Somente Ida (1 trecho) — desabilita visualmente o card de volta */
-.card-somente-ida{padding:14px 18px;background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border:1.5px solid #fdba74;border-radius:10px;margin-bottom:14px}
-.card-somente-ida label{display:flex;align-items:center;gap:12px;cursor:pointer;margin:0}
-.card-somente-ida input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#ea580c;flex-shrink:0}
-.card-somente-ida .label-title{font-size:.88rem;font-weight:700;color:#9a3412;line-height:1.2}
-.card-somente-ida .label-desc{font-size:.72rem;color:#7c2d12;margin-top:3px;line-height:1.35}
-.volta-disabled{opacity:.42;filter:grayscale(.9);pointer-events:none;position:relative;transition:opacity .2s,filter .2s}
-.volta-disabled::before{content:'DESABILITADO — VOO SOMENTE DE IDA';position:absolute;top:12px;right:14px;font-size:.65rem;font-weight:800;letter-spacing:.06em;color:#9a3412;background:#fff7ed;padding:5px 12px;border-radius:20px;border:1.5px solid #fdba74;z-index:2;pointer-events:none;box-shadow:0 2px 6px rgba(234,88,12,.15)}
+.card-somente-ida label{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:0;
+  cursor:pointer;
+  text-transform:none;
+  letter-spacing:0;
+}
+.card-somente-ida input[type=checkbox]{
+  width:18px;
+  height:18px;
+  accent-color:#d97706;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.card-somente-ida .label-title{font-size:.94rem;font-weight:800;color:#8a5b11;line-height:1.2}
+.card-somente-ida .label-desc{margin-top:3px;font-size:.76rem;line-height:1.55;color:#9a6b1c}
+.volta-disabled{position:relative;pointer-events:none;opacity:.46;filter:grayscale(.45)}
+.volta-disabled::before{
+  content:'DESABILITADO - VOO SOMENTE DE IDA';
+  position:absolute;
+  top:16px;
+  right:18px;
+  z-index:2;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid rgba(245,158,11,.24);
+  background:rgba(255,247,232,.96);
+  color:#8a5b11;
+  font-size:.58rem;
+  font-weight:800;
+  letter-spacing:.1em;
+}
+
+table{border-collapse:collapse}
+th,td{vertical-align:top}
+
+#calc-resultado-box,
+#calc-comp-resultado,
+#calc-lucro-box,
+#juros-resultado-box,
+#calc-bag-resultado,
+#calc-bag-campos{
+  border-radius:22px !important;
+  border-color:rgba(184,199,218,.84) !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(245,248,252,.86)) !important;
+  box-shadow:var(--sh-sm);
+}
+#calc-nota-latam{
+  background:var(--amber-soft) !important;
+  border-color:rgba(217,119,6,.22) !important;
+  color:#8a5b11 !important;
+  border-radius:14px !important;
+}
+#calc-nota-outras{
+  background:var(--green-soft) !important;
+  border-color:rgba(34,197,94,.2) !important;
+  color:var(--green) !important;
+  border-radius:14px !important;
+}
+[style*="background:#f0fdf4"]{background:linear-gradient(180deg,var(--green-soft),rgba(255,255,255,.86)) !important}
+[style*="background:#f0f4ff"],[style*="background:#eff6ff"],[style*="background:#e8f0fe"]{background:linear-gradient(180deg,#eef4ff,rgba(255,255,255,.9)) !important}
+[style*="background:#fffbeb"],[style*="background:#fff7ed"],[style*="background:#fff8e1"]{background:linear-gradient(180deg,var(--amber-soft),rgba(255,255,255,.92)) !important}
+[style*="background:#fef2f2"],[style*="background:#fff1f2"]{background:linear-gradient(180deg,var(--red-soft),rgba(255,255,255,.92)) !important}
+[style*="background:#fdf4ff"]{background:linear-gradient(180deg,#faf1ff,rgba(255,255,255,.92)) !important}
+[style*="background:#f5f5f7"],[style*="background:#fafafa"]{background:linear-gradient(180deg,#f6f8fc,#eef3f8) !important}
+[style*="border:1px solid #e0e0e0"],[style*="border:1px solid var(--border)"],[style*="border:1px solid #c7d7fc"],[style*="border:1px solid #bbf7d0"],[style*="border:1px solid #fde68a"],[style*="border:1px solid #fed7aa"],[style*="border:1px solid #fda4af"],[style*="border:1px solid #e9d5ff"],[style*="border:1px solid #c5d3f7"]{border-color:rgba(197,209,225,.9) !important}
+
+@media(max-width:1180px){
+  .page-hero,.dashboard-grid{grid-template-columns:1fr}
+  .dashboard-side-column{position:static}
+}
+
+@media(max-width:760px){
+  header{padding:16px 18px;align-items:flex-start}
+  .header-meta{width:100%;justify-content:flex-start}
+  .tab-bar{top:96px;padding:12px 16px 0}
+  main{padding:22px 16px 88px}
+  .page-hero-main,.page-hero-side,.dashboard-rail-card,.card,.config-card,.hist-item{padding:20px}
+  .hero-kpis{grid-template-columns:1fr}
+  .field-row,.field-row-3{grid-template-columns:1fr}
+  .actions{flex-direction:column}
+  .btn-primary,.btn-secondary,.btn-copy,.btn-preview,.btn-hist-copy,.btn-hist-open,.btn-hist-del{width:100%;justify-content:center}
+  .copy-actions,.hist-actions{flex-direction:column}
+  .hist-item-top,.hist-header{flex-direction:column;align-items:stretch}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <span class="logo">VoeComKennedy</span>
-  <span class="badge">Painel Interno</span>
+  <div class="header-brand">
+    <span class="header-mark">VK</span>
+    <div class="header-copy">
+      <span class="logo">VoeComKennedy</span>
+      <span class="header-sub">Operacao comercial interna</span>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="header-meta-card">
+      <span class="header-meta-label">Ambiente</span>
+      <span class="header-meta-value">Painel executivo</span>
+    </div>
+    <span class="badge">Sistema ativo</span>
+  </div>
 </header>
 
 <div class="tab-bar">
@@ -1378,6 +2228,30 @@ input[type="date"],input[type="time"]{cursor:pointer}
   <h2>Voucher de Viagem</h2>
   <p class="subtitle">Preencha os dados da reserva confirmada e gere o voucher VoeComKennedy sem referencia a plataformas externas.</p>
 
+  <!-- Colar tudo (auto-preenchimento Voucher) -->
+  <div class="card" id="card-colar-tudo-v" style="border:1px solid #1a56db;background:linear-gradient(180deg,#eff6ff 0%,#ffffff 100%)">
+    <div class="section-label" style="display:flex;align-items:center;gap:8px;color:#1a56db">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Preenchimento Automatico <span style="font-weight:400;color:#5a5a5a;font-size:.75rem">(opcional)</span>
+    </div>
+    <p style="margin:2px 0 10px;font-size:.8rem;color:#5a5a5a;line-height:1.5">
+      Cole todas as informacoes da reserva confirmada (passageiros com CPF, voos, hotel, horarios, escalas) e clique em <strong>Preencher</strong>. O sistema extrai e preenche os campos do voucher automaticamente. Revise sempre antes de gerar.
+    </p>
+    <div class="field">
+      <textarea id="v-colar-tudo" rows="10" placeholder="Exemplo:&#10;Voucher: VCK-000042&#10;Localizador: BFHSRK&#10;&#10;Passageiros:&#10;Carlos Alberto da Silva - CPF 123.456.789-00 - E-ticket 044-1234567890&#10;Maria da Silva - CPF 987.654.321-00 - E-ticket 044-1234567891&#10;&#10;IDA: LATAM LA 8240 - GRU 20/05/2026 22:30 -> NAT 21/05/2026 05:10 - Economica - Direto - 4h 40m&#10;VOLTA: LATAM LA 8241 - NAT 29/05/2026 06:00 -> GRU 11:50 - Economica - 1 escala em BSB 1h 10m&#10;Bagagem: 1 mao 10kg + 1 despachada 23kg&#10;&#10;Hotel: Grand Bavaro Princess - 5 estrelas&#10;Endereco: Playas De Bavaro, Punta Cana&#10;Email: reservas@hotel.com - Tel: +1 809-221-2311&#10;Check-in 20/05/2026 15:00 - Check-out 29/05/2026 12:00&#10;Quarto: Duplo - Cama Queen - Regime: All Inclusive" style="width:100%;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.8rem;line-height:1.55;padding:11px 12px;border:1px solid var(--border);border-radius:8px;outline:none"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
+      <button type="button" class="btn-primary" onclick="autoPreencherVoucher()" style="background:#1a56db;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path d="M9 12l2 2 4-4"/></svg>
+        Preencher Automatico
+      </button>
+      <button type="button" onclick="document.getElementById('v-colar-tudo').value='';document.getElementById('v-colar-feedback').innerHTML=''" style="background:#f3f4f6;color:#374151;border:1px solid var(--border);padding:10px 16px;border-radius:8px;font-weight:500;font-size:.85rem;cursor:pointer">
+        Limpar texto
+      </button>
+      <div id="v-colar-feedback" style="flex:1;min-width:200px;font-size:.78rem;color:#166534"></div>
+    </div>
+  </div>
+
   <!-- Identificacao -->
   <div class="card">
     <div class="section-label">Identificacao da Reserva</div>
@@ -2068,6 +2942,283 @@ function switchTab(name) {
   if (name === 'backup') renderBackup();
   if (name === 'voucher' && !document.getElementById('v-num').value) gerarNumVoucher();
   if (name === 'voucher' && document.getElementById('v-pax-rows') && !document.getElementById('v-pax-rows').children.length) addVPaxRow();
+  refreshDashboardChrome();
+}
+
+const DASHBOARD_META = {
+  hotel: {
+    eyebrow: 'Hospitality workflow',
+    railTitle: 'Publicacao do hotel',
+    railCopy: 'O resultado precisa sair limpo, rapido de validar e pronto para distribuicao no grupo ou WhatsApp.',
+    sideSteps: [
+      'Valide titulo, localizacao e descricao com linguagem objetiva.',
+      'Cheque se a vitrine tem imagens suficientes para sustentar a oferta.',
+      'Gere o link e copie o resultado assim que o status ficar pronto.'
+    ]
+  },
+  proposta: {
+    eyebrow: 'Sales workspace',
+    railTitle: 'Montagem da proposta',
+    railCopy: 'A leitura precisa destacar rota, passageiros e total sem forcar o operador a procurar informacao no formulario.',
+    sideSteps: [
+      'Feche primeiro a estrutura do voo antes de precificar.',
+      'Use a calculadora para consolidar Pix, cartao e comparativos.',
+      'Revise observacoes e gere o PDF quando o total estiver fechado.'
+    ]
+  },
+  voucher: {
+    eyebrow: 'Delivery workspace',
+    railTitle: 'Emissao do voucher',
+    railCopy: 'O voucher deve passar sensacao de documento final, com reserva clara, dados completos e leitura rapida.',
+    sideSteps: [
+      'Cole o texto bruto apenas para acelerar o preenchimento inicial.',
+      'Revise passageiros, trechos e hospedagem antes da emissao.',
+      'Gere o voucher apenas quando status e pagamento estiverem consistentes.'
+    ]
+  },
+  historico: {
+    eyebrow: 'Operational memory',
+    railTitle: 'Base local do dispositivo',
+    railCopy: 'Historico serve como memoria operacional rapida para reabrir propostas, copiar links e limpar volume antigo.',
+    sideSteps: [
+      'Pesquise por cliente, destino ou tipo para localizar mais rapido.',
+      'Reabra propostas e vouchers antigos antes de recriar manualmente.',
+      'Limpe registros obsoletos quando o navegador acumular volume.'
+    ]
+  },
+  backup: {
+    eyebrow: 'Data continuity',
+    railTitle: 'Protecao operacional',
+    railCopy: 'Backup manual continua sendo a protecao real contra perda local de dados, cache limpo ou troca de maquina.',
+    sideSteps: [
+      'Baixe um JSON sempre depois de cotacoes relevantes.',
+      'Guarde o arquivo em Drive, iCloud ou outro armazenamento externo.',
+      'Importe o arquivo novo apenas quando precisar restaurar ou mesclar dados.'
+    ]
+  }
+};
+
+function dashboardFieldValue(id) {
+  const el = document.getElementById(id);
+  if (!el) return '';
+  return (el.value || '').trim();
+}
+
+function dashboardTextCut(text, max) {
+  if (!text) return '';
+  return text.length > max ? text.slice(0, max - 1) + '...' : text;
+}
+
+function dashboardCountFilled(ids) {
+  return ids.filter(id => dashboardFieldValue(id)).length;
+}
+
+function dashboardFormatMetric(value, fallback) {
+  return value && String(value).trim() ? value : fallback;
+}
+
+function dashboardSetMetric(panel, index, label, value, sub, tone) {
+  const card = document.getElementById(`metric-${panel}-${index}`);
+  if (!card) return;
+  card.className = `metric-card ${tone || ''}`.trim();
+  const labelEl = card.querySelector('.metric-label');
+  const valueEl = card.querySelector('.metric-value');
+  const subEl = card.querySelector('.metric-sub');
+  if (labelEl) labelEl.textContent = label;
+  if (valueEl) valueEl.textContent = value;
+  if (subEl) subEl.textContent = sub || '';
+}
+
+function dashboardSetSummary(panel, status, tone, title, copy) {
+  const heroStatus = document.getElementById(`hero-status-${panel}`);
+  const heroTitle = document.getElementById(`hero-title-${panel}`);
+  const heroCopy = document.getElementById(`hero-copy-${panel}`);
+  const railStatus = document.getElementById(`rail-status-${panel}`);
+  const railTitle = document.getElementById(`rail-title-${panel}`);
+  const railCopy = document.getElementById(`rail-copy-${panel}`);
+  [heroStatus, railStatus].forEach(el => {
+    if (!el) return;
+    el.className = `status-chip ${tone || ''}`.trim();
+    el.textContent = status;
+  });
+  if (heroTitle) heroTitle.textContent = title;
+  if (heroCopy) heroCopy.textContent = copy;
+  if (railTitle) railTitle.textContent = title;
+  if (railCopy) railCopy.textContent = copy;
+}
+
+function buildDashboardLayout() {
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    const main = panel.querySelector('main');
+    if (!main || main.dataset.dashboardReady === '1') return;
+    const panelName = panel.id.replace('panel-', '');
+    const meta = DASHBOARD_META[panelName];
+    const titleEl = main.querySelector('h2');
+    const subtitleEl = main.querySelector('.subtitle');
+    if (!meta || !titleEl || !subtitleEl) return;
+
+    const hero = document.createElement('section');
+    hero.className = 'page-hero';
+    hero.innerHTML = `
+      <div class="page-hero-main">
+        <span class="hero-eyebrow">${meta.eyebrow}</span>
+        <div class="hero-copy">
+          <h1>${titleEl.textContent}</h1>
+          <p>${subtitleEl.textContent}</p>
+        </div>
+        <div class="hero-kpis">
+          ${[0,1,2].map(i => `
+            <div class="metric-card" id="metric-${panelName}-${i}">
+              <div class="metric-label">Indicador</div>
+              <div class="metric-value">-</div>
+              <div class="metric-sub">Sem dados ainda.</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <aside class="page-hero-side">
+        <div class="hero-side-stack">
+          <div class="hero-side-label">Resumo executivo</div>
+          <div class="status-chip attention" id="hero-status-${panelName}">Em preparacao</div>
+          <div class="hero-side-title" id="hero-title-${panelName}">${meta.railTitle}</div>
+          <div class="hero-side-copy" id="hero-copy-${panelName}">${meta.railCopy}</div>
+        </div>
+        <div class="hero-side-highlights">
+          ${meta.sideSteps.map((step, index) => `
+            <div class="hero-side-highlight">
+              <div class="hero-side-highlight-index">${index + 1}</div>
+              <span>${step}</span>
+            </div>
+          `).join('')}
+        </div>
+      </aside>
+    `;
+
+    const grid = document.createElement('section');
+    grid.className = 'dashboard-grid';
+
+    const formColumn = document.createElement('div');
+    formColumn.className = 'dashboard-form-column';
+
+    const sideColumn = document.createElement('aside');
+    sideColumn.className = 'dashboard-side-column';
+    sideColumn.innerHTML = `
+      <section class="dashboard-rail-card">
+        <div class="rail-overline">Situacao</div>
+        <div id="rail-status-${panelName}" class="status-chip attention">Em preparacao</div>
+        <div id="rail-title-${panelName}" class="rail-title" style="margin-top:14px">${meta.railTitle}</div>
+        <div id="rail-copy-${panelName}" class="rail-copy">${meta.railCopy}</div>
+      </section>
+      <section class="dashboard-rail-card">
+        <div class="rail-overline">Pontos de controle</div>
+        <div class="rail-list">
+          ${meta.sideSteps.map(step => `<div class="rail-list-item"><span>${step}</span></div>`).join('')}
+        </div>
+      </section>
+    `;
+
+    Array.from(main.children).forEach(child => {
+      if (child !== titleEl && child !== subtitleEl) formColumn.appendChild(child);
+    });
+
+    grid.append(formColumn, sideColumn);
+    main.innerHTML = '';
+    main.classList.add('dashboard-page');
+    main.dataset.dashboardReady = '1';
+    main.append(hero, grid);
+  });
+}
+
+function refreshDashboardChrome() {
+  const baseUrl = dashboardFieldValue('baseUrl');
+  const hotelLinkReady = document.getElementById('outputHotel')?.classList.contains('visible');
+  const hotelImageCount = dashboardCountFilled(['img1','img2','img3','img4','img5']);
+  const hotelWhatsapp = dashboardFieldValue('whatsapp');
+  let hotelHost = 'Nao definido';
+  try { if (baseUrl) hotelHost = new URL(baseUrl).hostname.replace(/^www\./, ''); } catch {}
+  dashboardSetMetric('hotel', 0, 'Canal', hotelHost, 'Destino atual do link da vitrine.', baseUrl ? 'positive' : 'attention');
+  dashboardSetMetric('hotel', 1, 'Imagens', `${hotelImageCount}/5`, hotelImageCount >= 3 ? 'Volume visual suficiente para uma vitrine forte.' : 'Preencha ao menos 3 imagens para enriquecer a oferta.', hotelImageCount >= 3 ? 'positive' : 'attention');
+  dashboardSetMetric('hotel', 2, 'Contato', hotelWhatsapp ? `+${hotelWhatsapp.slice(0, 4)}...${hotelWhatsapp.slice(-4)}` : 'Pendente', hotelWhatsapp ? 'WhatsApp configurado para o CTA final.' : 'Defina o numero comercial antes de publicar.', hotelWhatsapp ? 'positive' : 'risk');
+  dashboardSetSummary(
+    'hotel',
+    hotelLinkReady ? 'Link pronto' : 'Aguardando geracao',
+    hotelLinkReady ? 'positive' : 'attention',
+    hotelLinkReady ? 'Vitrine pronta para distribuicao' : 'Configure e gere o link principal',
+    hotelLinkReady
+      ? 'O bloco de resultado foi promovido para o topo do fluxo para permitir copia e validacao imediata.'
+      : 'Preencha os dados essenciais do hotel, valide as imagens e gere o link para colocar o resultado em destaque.'
+  );
+
+  const adultos = parseInt(dashboardFieldValue('p-adultos'), 10) || 0;
+  const criancas = parseInt(dashboardFieldValue('p-criancas'), 10) || 0;
+  const bebes = parseInt(dashboardFieldValue('p-bebes'), 10) || 0;
+  const totalPax = Math.max(1, adultos + criancas + bebes);
+  const orig = dashboardFieldValue('p-orig');
+  const dest = dashboardFieldValue('p-dest');
+  const totalPix = dashboardFieldValue('p-val-total-pix');
+  const somenteIda = document.getElementById('p-somente-ida')?.checked;
+  const rota = orig && dest ? `${orig.split(' - ')[0]} -> ${dest.split(' - ')[0]}` : 'Nao definida';
+  dashboardSetMetric('proposta', 0, 'Passageiros', String(totalPax), `${adultos} adulto(s), ${criancas} crianca(s), ${bebes} bebe(s).`, totalPax > 1 ? 'positive' : 'attention');
+  dashboardSetMetric('proposta', 1, 'Rota', rota, somenteIda ? 'Fluxo configurado para um unico trecho.' : 'Fluxo configurado para ida e volta.', orig && dest ? 'positive' : 'attention');
+  dashboardSetMetric('proposta', 2, 'Total', dashboardFormatMetric(totalPix, 'Aguardando'), totalPix ? 'Valor principal ja preenchido no bloco financeiro.' : 'Preencha ou aplique o valor calculado para concluir a proposta.', totalPix ? 'positive' : 'risk');
+  dashboardSetSummary(
+    'proposta',
+    totalPix ? 'Pronta para PDF' : orig || dest ? 'Em construcao' : 'Nova proposta',
+    totalPix ? 'positive' : (orig || dest ? 'attention' : 'risk'),
+    totalPix ? 'Precificacao principal consolidada' : 'Estruture rota, passageiros e preco total',
+    totalPix
+      ? 'Os numeros principais ja estao definidos e a leitura acima da dobra prioriza total, rota e volume de passageiros.'
+      : 'A proposta ainda depende do fechamento financeiro. Use a calculadora e aplique o total ao formulario para elevar o resultado.'
+  );
+
+  const voucherRows = document.querySelectorAll('#v-pax-rows tr').length;
+  const voucherStatus = dashboardFieldValue('v-status') || 'PENDENTE';
+  const voucherHotel = dashboardTextCut(dashboardFieldValue('v-hotel'), 20) || 'Nao definido';
+  const voucherNum = dashboardFieldValue('v-num');
+  dashboardSetMetric('voucher', 0, 'Passageiros', String(voucherRows || 0), voucherRows ? 'Linhas de passageiros prontas para emissao.' : 'Adicione os passageiros antes de gerar o voucher.', voucherRows ? 'positive' : 'attention');
+  dashboardSetMetric('voucher', 1, 'Status', voucherStatus, voucherStatus === 'PAGO' ? 'Reserva sinalizada como confirmada.' : 'Pagamento ainda requer validacao final.', voucherStatus === 'PAGO' ? 'positive' : 'attention');
+  dashboardSetMetric('voucher', 2, 'Hotel', voucherHotel, voucherHotel !== 'Nao definido' ? 'Hospedagem principal vinculada ao voucher.' : 'Complete os dados da hospedagem para uma entrega mais profissional.', voucherHotel !== 'Nao definido' ? 'positive' : 'risk');
+  dashboardSetSummary(
+    'voucher',
+    voucherNum ? 'Voucher estruturado' : 'Preenchimento inicial',
+    voucherNum ? 'positive' : 'attention',
+    voucherNum ? `Reserva ${voucherNum} em preparacao final` : 'Preencha reserva, passageiros e trechos',
+    voucherNum
+      ? 'Os dados-base ja existem. Revise passageiros, segmentos e hospedagem antes da emissao final.'
+      : 'O voucher ainda nao tem identificacao consolidada. Use o preenchimento automatico apenas como acelerador e revise tudo manualmente.'
+  );
+
+  const history = getHist();
+  const histPropostas = history.filter(item => item.tipo === 'proposta').length;
+  const histVouchers = history.filter(item => item.tipo === 'voucher').length;
+  const histHotels = history.filter(item => item.tipo === 'hotel').length;
+  const lastHistory = history[0];
+  dashboardSetMetric('historico', 0, 'Registros', String(history.length), history.length ? 'Base local carregada neste navegador.' : 'Nenhum registro salvo ainda.', history.length ? 'positive' : 'attention');
+  dashboardSetMetric('historico', 1, 'Propostas', String(histPropostas), `${histHotels} links de hotel e ${histVouchers} vouchers armazenados.`, histPropostas ? 'positive' : 'attention');
+  dashboardSetMetric('historico', 2, 'Ultimo item', lastHistory ? dashboardTextCut(lastHistory.nome || lastHistory.subtitulo || 'Registro', 18) : 'Nenhum', lastHistory ? `Entrada mais recente em ${lastHistory.data}.` : 'Os proximos envios aparecerao aqui.', lastHistory ? 'positive' : 'risk');
+  dashboardSetSummary(
+    'historico',
+    history.length ? 'Base ativa' : 'Sem registros',
+    history.length ? 'positive' : 'attention',
+    history.length ? 'Memoria operacional pronta para reutilizacao' : 'O historico sera criado conforme novos envios forem gerados',
+    history.length
+      ? 'Use esta aba como repositorio rapido para copiar links, reabrir propostas e limpar volume antigo quando necessario.'
+      : 'Assim que o painel gerar links, propostas ou vouchers, os registros passam a ser acessiveis aqui neste dispositivo.'
+  );
+
+  const backupTs = localStorage.getItem('vck_last_save');
+  dashboardSetMetric('backup', 0, 'Registros', String(history.length), 'Volume atual salvo automaticamente no navegador.', history.length ? 'positive' : 'attention');
+  dashboardSetMetric('backup', 1, 'Propostas', String(histPropostas), `${histVouchers} voucher(s) e ${histHotels} link(s) ja podem ser exportados.`, histPropostas ? 'positive' : 'attention');
+  dashboardSetMetric('backup', 2, 'Ultimo backup', backupTs ? dashboardTextCut(backupTs, 18) : 'Nenhum', backupTs ? 'Backup manual registrado no ambiente local.' : 'Nenhum export foi detectado ainda.', backupTs ? 'positive' : 'risk');
+  dashboardSetSummary(
+    'backup',
+    backupTs ? 'Cobertura ativa' : 'Backup pendente',
+    backupTs ? 'positive' : 'risk',
+    backupTs ? 'Protecao operacional recente' : 'Exporte um JSON para proteger o historico local',
+    backupTs
+      ? 'O auto-save local continua ativo, mas o ultimo backup manual tambem ja foi registrado para contingencia.'
+      : 'Como os dados ficam no navegador, o ponto critico aqui e gerar um backup manual antes de depender da maquina atual.'
+  );
 }
 
 // ── UTILS ────────────────────────────────────────────────────────────────────
@@ -2098,6 +3249,7 @@ function saveHist(h) {
     }
   }
   updateHistBadge();
+  refreshDashboardChrome();
 }
 function addHist(entry) {
   const h = getHist();
@@ -2167,13 +3319,25 @@ function delHist(id) {
   const h = getHist().filter(x => x.id !== id); saveHist(h); renderHistorico();
 }
 function reabrirHist(id) {
-  const item = getHist().find(x => x.id == id);
-  if (!item || !item.dados) { showToast('Dados desta entrada nao disponiveis para restaurar.'); return; }
-  if (item.tipo === 'proposta') restaurarProposta(item.dados);
-  else if (item.tipo === 'voucher') restaurarVoucher(item.dados);
+  try {
+    const item = getHist().find(x => x.id == id);
+    if (!item) { showToast('Registro nao encontrado no historico.'); return; }
+    if (!item.dados) { showToast('Este registro foi salvo em uma versao antiga e nao pode ser restaurado. Gere novamente para salvar com todos os dados.'); return; }
+    if (item.tipo === 'proposta') restaurarProposta(item.dados);
+    else if (item.tipo === 'voucher') restaurarVoucher(item.dados);
+    else if (item.tipo === 'hotel') showToast('Historico de hotel: use o botao Copiar para recuperar o link.');
+    else showToast('Tipo de registro desconhecido: ' + item.tipo);
+  } catch (e) {
+    console.error('[VoeComKennedy] Erro ao reabrir historico:', e);
+    showToast('Erro ao reabrir: ' + (e && e.message ? e.message : 'tente novamente'));
+  }
 }
 function restaurarProposta(d) {
-  limparProposta();
+  // Garante que a aba Proposta esta visivel ANTES de preencher — sem isso alguns toggles
+  // podem falhar porque os elementos nao estao no DOM ativo.
+  try { switchTab('proposta'); } catch(e) { console.warn('[VoeComKennedy] switchTab proposta:', e); }
+  try { limparProposta(); } catch(e) { console.warn('[VoeComKennedy] limparProposta:', e); }
+  const tryRun = (label, fn) => { try { fn(); } catch(e) { console.warn('[VoeComKennedy] restaurarProposta ['+label+']:', e); } };
   const sv = (id, v) => { const el = document.getElementById(id); if(el && v != null) el.value = v; };
   const sc = (id, v) => { const el = document.getElementById(id); if(el) el.checked = !!v; };
   sv('p-cliente', d.cliente); sv('p-orig', d.orig); sv('p-dest', d.dest);
@@ -2207,12 +3371,19 @@ function restaurarProposta(d) {
   sc('p-com-juros', d.comJuros !== false); toggleJurosUI();
   sv('p-obs', d.obs); sv('p-link-aereo', d.linkAereo);
   sv('p-adultos', d.adultos || 1); sv('p-criancas', d.criancas || 0); sv('p-bebes', d.bebes || 0);
-  // Acionar toggles
-  toggleEscalaIda(); toggleEscalaVolta();
-  toggleTrocaDest('ida1'); toggleTrocaDest('ida2'); toggleTrocaDest('volta1'); toggleTrocaDest('volta2');
-  toggleMultitrecho();
-  syncHotelCheckin(); syncHotelCheckout(); calcNoites();
-  calcValorPorPessoa(); calcJurosCartao();
+  // Acionar toggles (cada um protegido — falha de um nao quebra os outros)
+  tryRun('toggleEscalaIda',    () => toggleEscalaIda());
+  tryRun('toggleEscalaVolta',  () => toggleEscalaVolta());
+  tryRun('toggleTrocaIda1',    () => toggleTrocaDest('ida1'));
+  tryRun('toggleTrocaIda2',    () => toggleTrocaDest('ida2'));
+  tryRun('toggleTrocaVolta1',  () => toggleTrocaDest('volta1'));
+  tryRun('toggleTrocaVolta2',  () => toggleTrocaDest('volta2'));
+  tryRun('toggleMultitrecho',  () => toggleMultitrecho());
+  tryRun('syncHotelCheckin',   () => syncHotelCheckin());
+  tryRun('syncHotelCheckout',  () => syncHotelCheckout());
+  tryRun('calcNoites',         () => calcNoites());
+  tryRun('calcValorPorPessoa', () => calcValorPorPessoa());
+  tryRun('calcJurosCartao',    () => calcJurosCartao());
   // Restaurar calculadora
   if (d.calc) {
     sv('p-calc-tipo',          d.calc.tipo || 'por-milhas');
@@ -2259,23 +3430,26 @@ function restaurarProposta(d) {
       }
     }
   }
-  toggleIdadesCriancas(); toggleIdadesBebes();
+  tryRun('toggleIdadesCriancas', () => toggleIdadesCriancas());
+  tryRun('toggleIdadesBebes',    () => toggleIdadesBebes());
   if (d.idadesCriancas) d.idadesCriancas.forEach((v,i) => sv('p-crianca-idade-'+i, v));
   if (d.idadesBebes)    d.idadesBebes.forEach((v,i)    => sv('p-bebe-idade-'+i, v === 'menos de 1 ano' ? '0' : '1'));
-  switchTab('proposta');
   showToast('Proposta restaurada! Edite e gere novamente.');
 }
 function restaurarVoucher(d) {
+  // Aba visivel ANTES de preencher — evita erro em toggles que dependem de elementos no DOM ativo
+  try { switchTab('voucher'); } catch(e) { console.warn('[VoeComKennedy] switchTab voucher:', e); }
+  const tryRun = (label, fn) => { try { fn(); } catch(e) { console.warn('[VoeComKennedy] restaurarVoucher ['+label+']:', e); } };
   const sv = (id, v) => { const el = document.getElementById(id); if(el && v != null) el.value = v; };
   // Limpar pax rows
   vPaxCount = 0;
   const tbody = document.getElementById('v-pax-rows');
   if (tbody) tbody.innerHTML = '';
-  (d.pax || []).forEach(p => addVPaxRow(p.nome, p.doc, p.eTicket));
+  (d.pax || []).forEach(p => tryRun('addVPaxRow', () => addVPaxRow(p.nome, p.doc, p.eTicket)));
   // Campos textuais
   sv('v-num', d.num); sv('v-status', d.status); sv('v-pagamento', d.pagamento);
   sv('v-checkin-code', d.checkinCode);
-  sv('v-ida-parada', d.idaParada); toggleVEscalaIda();
+  sv('v-ida-parada', d.idaParada); tryRun('toggleVEscalaIda', () => toggleVEscalaIda());
   sv('v-ida-cia1', d.idaCia1); sv('v-ida-voo1', d.idaVoo1);
   sv('v-ida-orig1', d.idaOrig1); sv('v-ida-dest1', d.idaDest1);
   sv('v-ida-hora-dep1', d.idaHoraDep1); sv('v-ida-hora-cheg1', d.idaHoraCheg1);
@@ -2286,7 +3460,7 @@ function restaurarVoucher(d) {
   sv('v-ida-hora-dep2', d.idaHoraDep2); sv('v-ida-hora-cheg2', d.idaHoraCheg2);
   sv('v-ida-dur2', d.idaDur2); sv('v-ida-classe2', d.idaClasse2);
   sv('v-volta-checkin-code', d.voltaCheckinCode);
-  sv('v-volta-parada', d.voltaParada); toggleVEscalaVolta();
+  sv('v-volta-parada', d.voltaParada); tryRun('toggleVEscalaVolta', () => toggleVEscalaVolta());
   sv('v-volta-cia1', d.voltaCia1); sv('v-volta-voo1', d.voltaVoo1);
   sv('v-volta-orig1', d.voltaOrig1); sv('v-volta-dest1', d.voltaDest1);
   sv('v-volta-hora-dep1', d.voltaHoraDep1); sv('v-volta-hora-cheg1', d.voltaHoraCheg1);
@@ -2303,7 +3477,7 @@ function restaurarVoucher(d) {
   sv('v-regime', d.regime); sv('v-cama', d.cama);
   sv('v-checkin-data', d.checkinISO); sv('v-checkin-hora', d.checkinHora);
   sv('v-checkout-data', d.checkoutISO); sv('v-checkout-hora', d.checkoutHora);
-  calcNoitesVoucher && calcNoitesVoucher();
+  tryRun('calcNoitesVoucher', () => calcNoitesVoucher && calcNoitesVoucher());
   sv('v-comodidades', d.comodidades); sv('v-obs', d.obs);
   sv('v-cancel-hotel', d.cancelHotel); sv('v-cancel-voo', d.cancelVoo);
   // Datas ISO dos voos — restaurar se disponiveis
@@ -2315,9 +3489,232 @@ function restaurarVoucher(d) {
   if (d.voltaDataCheg1ISO) sv('v-volta-data-cheg1', d.voltaDataCheg1ISO);
   if (d.voltaDataDep2ISO)  sv('v-volta-data-dep2', d.voltaDataDep2ISO);
   if (d.voltaDataCheg2ISO) sv('v-volta-data-cheg2', d.voltaDataCheg2ISO);
-  switchTab('voucher');
   showToast('Voucher restaurado! Edite e gere novamente.');
 }
+
+// ── AUTO-PREENCHIMENTO VOUCHER (Colar tudo) ───────────────────────────────────
+// Recebe texto bagunçado da reserva confirmada e preenche os campos do Voucher.
+function autoPreencherVoucher() {
+  const src = (document.getElementById('v-colar-tudo').value || '').trim();
+  const fb  = document.getElementById('v-colar-feedback');
+  if (!src) { if (fb) fb.innerHTML = '<span style="color:#b91c1c">Cole um texto antes de clicar em Preencher.</span>'; return; }
+
+  const preenchidos = [];
+  const set = (id, v, label) => {
+    if (v === null || v === undefined || v === '') return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = v;
+    try { el.dispatchEvent(new Event('input', {bubbles:true})); el.dispatchEvent(new Event('change', {bubbles:true})); } catch {}
+    if (label) preenchidos.push(label);
+  };
+  const setSelectByText = (id, frag, label) => {
+    const sel = document.getElementById(id);
+    if (!sel || !frag) return;
+    const f = String(frag).toLowerCase();
+    const opt = [...sel.options].find(o => o.text.toLowerCase().includes(f) || o.value.toLowerCase().includes(f));
+    if (opt) { sel.value = opt.value; if (label) preenchidos.push(label); }
+  };
+
+  const txt = src.replace(/\r/g,'');
+  const low = txt.toLowerCase();
+
+  // ── HELPERS ────────────────────────────────────────────────────────────────
+  const MESES = {jan:'01',fev:'02',mar:'03',abr:'04',mai:'05',jun:'06',jul:'07',ago:'08',set:'09',out:'10',nov:'11',dez:'12',janeiro:'01',fevereiro:'02',marco:'03','março':'03',abril:'04',maio:'05',junho:'06',julho:'07',agosto:'08',setembro:'09',outubro:'10',novembro:'11',dezembro:'12'};
+  const aISO = (d,m,y) => { d=String(d).padStart(2,'0'); m=String(m).padStart(2,'0'); if(String(y).length===2) y='20'+y; return y+'-'+m+'-'+d; };
+  const todasDatas = s => {
+    const out = [];
+    const re = /\b(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})\b/g;
+    let m; while ((m = re.exec(s))) out.push(aISO(m[1],m[2],m[3]));
+    return out;
+  };
+  const todasHoras = s => [...s.matchAll(/\b(\d{1,2})[h:](\d{2})\b/g)].map(m => String(m[1]).padStart(2,'0')+':'+m[2]);
+  const extrairVoo = s => { const m = s.match(/\b([A-Z]{2})\s*(\d{2,4})\b/); return m ? (m[1]+' '+m[2]) : ''; };
+  const extrairDur = s => { const m = s.match(/\b(\d{1,2})\s*h\s*(\d{1,2})\s*m?/i); return m ? (m[1]+'h '+String(m[2]).padStart(2,'0')+'m') : ''; };
+  const extrairClasse = s => /\bexecutiv/i.test(s) ? 'Executiva' : (/\bprimeira|first\s+class/i.test(s) ? 'Primeira' : (/\beconomic/i.test(s) ? 'Economica' : ''));
+  const CIAS = [
+    ['LATAM',             /\b(latam|tam|la\s?\d)/i],
+    ['Gol',               /\b(gol|g3\s?\d)/i],
+    ['Azul',              /\b(azul|ad\s?\d)/i],
+    ['Copa Airlines',     /\b(copa|cm\s?\d)/i],
+    ['Avianca',           /\b(avianca|av\s?\d)/i],
+    ['American Airlines', /\b(american|aa\s?\d)/i],
+    ['Delta',             /\b(delta|dl\s?\d)/i],
+    ['United',            /\b(united|ua\s?\d)/i],
+    ['Air France',        /\b(air\s?france|af\s?\d)/i],
+    ['KLM',               /\b(klm|kl\s?\d)/i],
+    ['Lufthansa',         /\b(lufthansa|lh\s?\d)/i],
+    ['Iberia',            /\b(iberia|ib\s?\d)/i],
+    ['TAP',               /\b(tap|tp\s?\d)/i],
+    ['British Airways',   /\b(british\s?airways|ba\s?\d)/i],
+    ['Emirates',          /\b(emirates|ek\s?\d)/i],
+    ['Qatar Airways',     /\b(qatar|qr\s?\d)/i],
+    ['Turkish Airlines',  /\b(turkish|tk\s?\d)/i],
+    ['Aerolineas Argentinas', /\b(aerolineas|aerol[ií]neas|ar\s?\d)/i],
+  ];
+  const extrairCia = s => { for (const [n,re] of CIAS) if (re.test(s)) return n; return ''; };
+  const paradaDe = s => {
+    if (/\bdireto|sem\s+(escala|conex)/i.test(s)) return 'direto';
+    if (/\b2\s*(escalas?|conex[oõ]es?|paradas?)/i.test(s)) return '2escalas';
+    if (/\b(1\s*(escala|conex[aã]o|parada)|com\s+escala|com\s+conex)/i.test(s)) return '1escala';
+    return '';
+  };
+
+  // ── NÚMERO DO VOUCHER ──────────────────────────────────────────────────────
+  const mVck = txt.match(/\b(VCK[-\s]?\d{3,6})\b/i);
+  if (mVck) set('v-num', mVck[1].toUpperCase().replace(/\s+/,'-'), 'Número Voucher');
+
+  // ── LOCALIZADOR / CHECK-IN CODE ────────────────────────────────────────────
+  const mLoc = txt.match(/(?:localizador|pnr|c[oó]digo\s*(?:de\s*)?(?:reserva|check[- ]?in)?|check[- ]?in\s+code)\s*:?\s*([A-Z0-9]{5,8})\b/i);
+  if (mLoc) { set('v-checkin-code', mLoc[1].toUpperCase(), 'Localizador Ida'); set('v-volta-checkin-code', mLoc[1].toUpperCase(), 'Localizador Volta'); }
+
+  // ── PASSAGEIROS (CPF) ──────────────────────────────────────────────────────
+  const pax = [];
+  txt.split('\n').forEach(linha => {
+    const cpfM = linha.match(/(\d{3}\.?\d{3}\.?\d{3}[-.]?\d{2})/);
+    if (!cpfM) return;
+    const cpf = cpfM[1];
+    let nome = linha.slice(0, cpfM.index).replace(/(passageiro|pax|nome|titular)\s*:?/ig,'').replace(/[-:–—|]+$/,'').trim();
+    if (!nome) {
+      // tenta nome vindo após CPF
+      const depois = linha.slice(cpfM.index + cpf.length).replace(/(cpf|doc|documento)\s*:?/ig,'').trim();
+      nome = depois.split(/[-:|]/)[0].trim();
+    }
+    const tkM = linha.match(/(?:e[-]?ticket|ticket|tkt|bilhete)\s*:?\s*(\d{3}[-\s]?\d{9,12})/i) || linha.match(/\b(\d{3}[-]\d{10,12})\b/);
+    const eTicket = tkM ? tkM[1].replace(/\s/g,'') : '';
+    pax.push({ nome: nome.replace(/\s+/g,' '), doc: cpf, eTicket });
+  });
+  if (pax.length) {
+    try {
+      if (typeof vPaxCount !== 'undefined') vPaxCount = 0;
+      const tbody = document.getElementById('v-pax-rows');
+      if (tbody) tbody.innerHTML = '';
+      pax.forEach(p => { if (typeof addVPaxRow === 'function') addVPaxRow(p.nome, p.doc, p.eTicket); });
+      preenchidos.push(pax.length + ' passageiro(s)');
+    } catch (e) { console.warn('[VoeComKennedy] pax auto:', e); }
+  }
+
+  // ── SEPARAR BLOCOS IDA / VOLTA / HOTEL ─────────────────────────────────────
+  const idxIda   = low.search(/\b(ida\b|outbound|trecho\s*1)/);
+  const idxVolta = low.search(/\b(volta\b|retorno|inbound|regresso|trecho\s*2)/);
+  const idxHotel = low.search(/\b(hotel\b|hospedagem|resort|pousada)/);
+  const ends = [idxVolta, idxHotel].filter(x => x > idxIda).sort((a,b)=>a-b);
+  const blocoIda   = (idxIda   >= 0) ? txt.slice(idxIda, ends[0]) : txt;
+  const blocoVolta = (idxVolta >= 0) ? txt.slice(idxVolta, (idxHotel > idxVolta ? idxHotel : undefined)) : '';
+  const blocoHotel = (idxHotel >= 0) ? txt.slice(idxHotel) : '';
+
+  // ── IDA ────────────────────────────────────────────────────────────────────
+  const mRotaI = blocoIda.match(/\b([A-Z]{3})\s*(?:->|→|\/|-|–|—|para|pra|to)\s*([A-Z]{3})\b/);
+  if (mRotaI) { set('v-ida-orig1', mRotaI[1], 'Orig Ida'); set('v-ida-dest1', mRotaI[2], 'Dest Ida'); }
+  set('v-ida-cia1',    extrairCia(blocoIda),    'Cia Ida');
+  set('v-ida-voo1',    extrairVoo(blocoIda),    'Voo Ida');
+  set('v-ida-dur1',    extrairDur(blocoIda),    'Duração Ida');
+  const classeI = extrairClasse(blocoIda); if (classeI) setSelectByText('v-ida-classe1', classeI.toLowerCase(), 'Classe Ida');
+  const dIda = todasDatas(blocoIda);
+  if (dIda[0]) set('v-ida-data-dep1',  dIda[0], 'Data dep Ida');
+  set('v-ida-data-cheg1', dIda[1] || dIda[0] || '', dIda[1] ? 'Data cheg Ida' : '');
+  const hIda = todasHoras(blocoIda);
+  if (hIda[0]) set('v-ida-hora-dep1',  hIda[0], 'Saída Ida');
+  if (hIda[1]) set('v-ida-hora-cheg1', hIda[1], 'Chegada Ida');
+  const pI = paradaDe(blocoIda); if (pI) set('v-ida-parada', pI, 'Paradas Ida');
+  if (pI && pI !== 'direto') {
+    const mCidade = blocoIda.match(/(?:escala|conex[aã]o)\s+(?:em\s+)?([A-Z]{3})\b/i) || blocoIda.match(/\bem\s+([A-Z]{3})\b/);
+    if (mCidade) set('v-ida-esc-city', mCidade[1].toUpperCase(), 'Escala Ida');
+    const mTempo = blocoIda.match(/(?:escala|espera|parada|conex[aã]o)[^0-9]{0,20}(\d{1,2}\s*h\s*\d{1,2}\s*m?)/i);
+    if (mTempo) set('v-ida-esc-tempo', mTempo[1].replace(/\s+/g,' '), 'Tempo Escala Ida');
+  }
+
+  // ── VOLTA ──────────────────────────────────────────────────────────────────
+  if (blocoVolta) {
+    const mRotaV = blocoVolta.match(/\b([A-Z]{3})\s*(?:->|→|\/|-|–|—|para|pra|to)\s*([A-Z]{3})\b/);
+    if (mRotaV) { set('v-volta-orig1', mRotaV[1], 'Orig Volta'); set('v-volta-dest1', mRotaV[2], 'Dest Volta'); }
+    set('v-volta-cia1',    extrairCia(blocoVolta), 'Cia Volta');
+    set('v-volta-voo1',    extrairVoo(blocoVolta), 'Voo Volta');
+    set('v-volta-dur1',    extrairDur(blocoVolta), 'Duração Volta');
+    const classeV = extrairClasse(blocoVolta); if (classeV) setSelectByText('v-volta-classe1', classeV.toLowerCase(), 'Classe Volta');
+    const dV = todasDatas(blocoVolta);
+    if (dV[0]) set('v-volta-data-dep1',  dV[0], 'Data dep Volta');
+    set('v-volta-data-cheg1', dV[1] || dV[0] || '', dV[1] ? 'Data cheg Volta' : '');
+    const hV = todasHoras(blocoVolta);
+    if (hV[0]) set('v-volta-hora-dep1',  hV[0], 'Saída Volta');
+    if (hV[1]) set('v-volta-hora-cheg1', hV[1], 'Chegada Volta');
+    const pV = paradaDe(blocoVolta); if (pV) set('v-volta-parada', pV, 'Paradas Volta');
+    if (pV && pV !== 'direto') {
+      const mCidadeV = blocoVolta.match(/(?:escala|conex[aã]o)\s+(?:em\s+)?([A-Z]{3})\b/i) || blocoVolta.match(/\bem\s+([A-Z]{3})\b/);
+      if (mCidadeV) set('v-volta-esc-city', mCidadeV[1].toUpperCase(), 'Escala Volta');
+      const mTempoV = blocoVolta.match(/(?:escala|espera|parada|conex[aã]o)[^0-9]{0,20}(\d{1,2}\s*h\s*\d{1,2}\s*m?)/i);
+      if (mTempoV) set('v-volta-esc-tempo', mTempoV[1].replace(/\s+/g,' '), 'Tempo Escala Volta');
+    }
+  }
+
+  // ── BAGAGEM ────────────────────────────────────────────────────────────────
+  if (/\bmochila\b/i.test(low))                      setSelectByText('v-bag-mochila', 'mochila', 'Mochila');
+  if (/\b(bagagem\s+de\s+)?m[aã]o\b/i.test(low))     setSelectByText('v-bag-mao',     'mao',     'Bag Mão');
+  const mKg = low.match(/(\d{1,3})\s*kg/);
+  if (mKg) setSelectByText('v-bag-desp', mKg[1]+'kg', 'Desp '+mKg[1]+'kg');
+
+  // ── HOTEL ──────────────────────────────────────────────────────────────────
+  if (blocoHotel) {
+    const mH = blocoHotel.match(/hotel\s*:?\s*([^\n]+)/i);
+    if (mH) set('v-hotel', mH[1].replace(/\s+-\s+.*$/,'').replace(/\s+\d\s+estrelas?.*$/i,'').trim(), 'Hotel');
+    const mEstr = blocoHotel.match(/(\d)\s*estrelas?/i);
+    if (mEstr) set('v-estrelas-v', mEstr[1], 'Estrelas');
+    const mEnd = blocoHotel.match(/(?:endere[cç]o|address|local)\s*:?\s*([^\n]+)/i);
+    if (mEnd) set('v-endereco', mEnd[1].trim(), 'Endereço');
+    const mEmail = blocoHotel.match(/\b([\w.+-]+@[\w.-]+\.[a-z]{2,})\b/i);
+    if (mEmail) set('v-email-hotel', mEmail[1], 'Email Hotel');
+    const mTel = blocoHotel.match(/(?:tel|telefone|fone|phone)\s*:?\s*([\+\d][\+\d\s\-().]{6,25})/i);
+    if (mTel) set('v-tel-hotel', mTel[1].trim(), 'Telefone Hotel');
+    const mCI = blocoHotel.match(/check[-\s]?in\s*:?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})(?:[^\n]{0,25}?(\d{1,2}[h:]\d{2}))?/i);
+    if (mCI) {
+      const dp = mCI[1].match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+      if (dp) set('v-checkin-data', aISO(dp[1],dp[2],dp[3]), 'Check-in');
+      if (mCI[2]) setSelectByText('v-checkin-hora', mCI[2].replace('h',':'), 'Hora Check-in');
+    }
+    const mCO = blocoHotel.match(/check[-\s]?out\s*:?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})(?:[^\n]{0,25}?(\d{1,2}[h:]\d{2}))?/i);
+    if (mCO) {
+      const dp = mCO[1].match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+      if (dp) set('v-checkout-data', aISO(dp[1],dp[2],dp[3]), 'Check-out');
+      if (mCO[2]) setSelectByText('v-checkout-hora', mCO[2].replace('h',':'), 'Hora Check-out');
+    }
+    // Regime
+    if      (/all\s*inclusive|tudo\s+inclu[ií]do/i.test(blocoHotel)) setSelectByText('v-regime', 'all inclusive', 'Regime');
+    else if (/meia\s+pens[aã]o/i.test(blocoHotel))                    setSelectByText('v-regime', 'meia', 'Regime');
+    else if (/pens[aã]o\s+completa/i.test(blocoHotel))                setSelectByText('v-regime', 'completa', 'Regime');
+    else if (/caf[eé]\s+da\s+manh[aã]/i.test(blocoHotel))             setSelectByText('v-regime', 'caf', 'Regime');
+    // Cama
+    if      (/\bqueen/i.test(blocoHotel)) setSelectByText('v-cama', 'queen', 'Cama');
+    else if (/\bking/i.test(blocoHotel))  setSelectByText('v-cama', 'king',  'Cama');
+    else if (/\btwin/i.test(blocoHotel))  setSelectByText('v-cama', 'twin',  'Cama');
+    else if (/\bcasal/i.test(blocoHotel)) setSelectByText('v-cama', 'casal', 'Cama');
+    // Tipo quarto
+    if      (/\btriplo/i.test(blocoHotel))   setSelectByText('v-tipo-quarto', 'triplo',   'Tipo Quarto');
+    else if (/\bduplo/i.test(blocoHotel))    setSelectByText('v-tipo-quarto', 'duplo',    'Tipo Quarto');
+    else if (/\bsolteiro/i.test(blocoHotel)) setSelectByText('v-tipo-quarto', 'solteiro', 'Tipo Quarto');
+    else if (/\bsu[ií]te/i.test(blocoHotel)) setSelectByText('v-tipo-quarto', 'suite',    'Tipo Quarto');
+    // Quartos (quantidade)
+    const mQ = blocoHotel.match(/(\d+)\s*quartos?/i);
+    if (mQ) set('v-quartos', mQ[1], 'Qtd Quartos');
+    // Descrição do quarto (após "quarto:" ou "acomodação:")
+    const mDQ = blocoHotel.match(/(?:descri[cç][aã]o\s+do\s+)?quarto\s*:?\s*([^\n]{3,80})/i);
+    if (mDQ && !/^\s*(\d|duplo|triplo|solteiro|su[ií]te)/i.test(mDQ[1])) set('v-desc-quarto', mDQ[1].trim(), 'Desc. Quarto');
+  }
+
+  // ── TOGGLES pós-preenchimento ──────────────────────────────────────────────
+  const tryRun = (label, fn) => { try { fn(); } catch(e) { console.warn('[VoeComKennedy] voucher-auto ['+label+']:', e); } };
+  tryRun('toggleVEscalaIda',   () => typeof toggleVEscalaIda   === 'function' && toggleVEscalaIda());
+  tryRun('toggleVEscalaVolta', () => typeof toggleVEscalaVolta === 'function' && toggleVEscalaVolta());
+  tryRun('calcNoitesVoucher',  () => typeof calcNoitesVoucher  === 'function' && calcNoitesVoucher());
+
+  // ── FEEDBACK ───────────────────────────────────────────────────────────────
+  if (fb) {
+    if (!preenchidos.length) fb.innerHTML = '<span style="color:#b91c1c">Nada foi extraido. Revise o formato do texto.</span>';
+    else fb.innerHTML = '<strong>' + preenchidos.length + ' campos preenchidos:</strong> ' + preenchidos.slice(0,14).join(', ') + (preenchidos.length > 14 ? '...' : '') + ' <span style="color:#5a5a5a">— revise antes de gerar.</span>';
+  }
+  try { showToast(preenchidos.length ? (preenchidos.length + ' campos preenchidos. Revise antes de gerar.') : 'Nenhum campo extraido.'); } catch {}
+}
+
+
 function clearAll() {
   if (confirm('Limpar todo o historico?')) { localStorage.removeItem(HIST_KEY); updateHistBadge(); renderHistorico(); }
 }
@@ -2341,6 +3738,7 @@ function renderBackup() {
     el('bk-ultimo-save').innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       ${ts ? 'Último backup manual: ' + ts : 'Nenhum backup exportado ainda. Recomendamos exportar agora!'}`;
   }
+  refreshDashboardChrome();
 }
 
 function exportarBackup() {
@@ -4780,9 +6178,20 @@ body{font-family:'Inter',Helvetica,Arial,sans-serif;background:#f0f2f5;color:var
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  buildDashboardLayout();
   const saved = localStorage.getItem('vck_base_url');
   if (saved) document.getElementById('baseUrl').value = saved;
   updateHistBadge();
+  refreshDashboardChrome();
+
+  document.addEventListener('input', refreshDashboardChrome);
+  document.addEventListener('change', refreshDashboardChrome);
+
+  const voucherRows = document.getElementById('v-pax-rows');
+  if (voucherRows) new MutationObserver(refreshDashboardChrome).observe(voucherRows, { childList: true, subtree: true });
+
+  const outputHotel = document.getElementById('outputHotel');
+  if (outputHotel) new MutationObserver(refreshDashboardChrome).observe(outputHotel, { attributes: true, attributeFilter: ['class'] });
 });
 
 document.getElementById('baseUrl').addEventListener('change', function() {
